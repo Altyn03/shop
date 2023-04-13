@@ -1,0 +1,52 @@
+@import "../../../utils/vars";
+
+.item {
+    display: block;
+    text-decoration: none;
+    color: black;
+    position: relative;
+    @include displayFlexColumn;
+    margin-top: 3%;
+    width: 30%;
+    height: 600px;
+    border-radius: 10px;
+    @include transitDuration(0.4s);
+    &:hover {
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    }
+
+    > h1 {
+        height: 15%;
+        font-size: 20px;
+    }
+    > h2 {
+        height: 7%;
+        font-size: 18px;
+        font-weight: 100;
+    }
+    > h3 {
+        height: 5%;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    &__button {
+        margin: 5% auto;
+        &_item {
+            border-radius: 8px;
+            margin: 0 10px;
+            padding: 5px 10px;
+            background-color: #fff;
+            color: black;
+            @include borderBlack;
+            @include transitDuration(0.3s);
+            &:hover {
+                @include hoverWhiteToBlack;
+            }
+        }
+    }
+}
+
+.img {
+    height: 60%;
+    padding: 50px;
+}

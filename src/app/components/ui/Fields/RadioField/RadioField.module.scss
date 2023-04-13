@@ -1,0 +1,17 @@
+@import "../../../../utils/vars";
+
+.radioField {
+    margin-top: 20px;
+    @include borderBox;
+    > label {
+        font-size: 18px;
+    }
+    &__input {
+        margin-top: 10px;
+        padding: 0 10px;
+        display: inline-block;
+        > label {
+            font-size: 18px;
+        }
+    }
+}

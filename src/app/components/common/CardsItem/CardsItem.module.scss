@@ -1,0 +1,7 @@
+@import "../../../utils/vars";
+.container {
+    @include displayFlexRow;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    min-height: 1325px;
+}

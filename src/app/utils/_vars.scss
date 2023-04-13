@@ -1,0 +1,54 @@
+$gray: #adabab;
+$black: #000;
+
+@mixin borderBox {
+    box-sizing: border-box;
+}
+
+@mixin borderRed {
+    border: 1px solid red;
+}
+@mixin borderWhite {
+    border: 1px solid white;
+}
+@mixin borderBlack {
+    border: 1px solid black;
+}
+
+@mixin displayFlexRow {
+    display: flex;
+    flex-direction: row;
+}
+@mixin displayFlexColumn {
+    display: flex;
+    flex-direction: column;
+}
+@mixin displayFlexJustCenter {
+    display: flex;
+    justify-content: center;
+}
+
+@mixin hr {
+    border: 2px solid gray;
+    margin: 0 35%;
+    margin-bottom: 20px;
+}
+
+@mixin transitDuration($__time) {
+    transition-duration: $__time;
+}
+
+@mixin hoverBlackToWhite {
+    background-color: #fff;
+    color: black;
+}
+@mixin hoverWhiteToBlack {
+    background-color: #000;
+    color: white;
+}
+
+@mixin view {
+    @include displayFlexJustCenter;
+    width: 100%;
+    height: 800px;
+}

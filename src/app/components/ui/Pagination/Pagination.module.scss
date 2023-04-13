@@ -1,0 +1,34 @@
+@import "../../../utils/vars";
+
+.nav {
+    @include borderBox;
+    padding: 0 20%;
+    margin-top: 3%;
+    &_list {
+        padding: 0;
+        @include displayFlexRow;
+        justify-content: center;
+        list-style: none;
+        &_link {
+            text-decoration: none;
+            color: black;
+            &_item {
+                width: 40px;
+                @include borderBlack;
+                font-size: 18px;
+                padding: 5px;
+                margin: 0 5px;
+                @include transitDuration(0.3s);
+                border-radius: 5px;
+                &:hover {
+                    @include hoverWhiteToBlack;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
+
+.active {
+    @include hoverWhiteToBlack;
+}

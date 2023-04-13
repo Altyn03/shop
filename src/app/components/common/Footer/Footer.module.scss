@@ -1,0 +1,49 @@
+@import "../../../utils/vars";
+.footer {
+    @include borderBox;
+    @include displayFlexRow;
+    justify-content: space-around;
+    background-color: #000;
+    &_block {
+        flex-grow: 1;
+        width: 50%;
+        > img {
+            width: 30%;
+            margin: 30px 0 30px 10%;
+        }
+        &__social {
+            margin: 30px auto 0;
+            width: 40%;
+            &_icon {
+                color: white;
+                display: inline-block;
+                width: 35px;
+                height: 35px;
+                transform: rotate(45deg);
+                border: 1px solid white;
+                margin: 20px;
+                @include transitDuration(0.3s);
+                &:hover {
+                    background-color: white;
+                    > i {
+                        color: #000;
+                    }
+                }
+                > i {
+                    position: relative;
+                    top: 12%;
+                    left: 19%;
+                    font-size: 24px;
+                    transform: rotate(-45deg);
+                }
+            }
+        }
+
+        &__confident {
+            margin-left: 30%;
+            display: inline-block;
+            text-decoration: none;
+            color: $gray;
+        }
+    }
+}

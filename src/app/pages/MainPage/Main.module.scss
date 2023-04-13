@@ -1,0 +1,44 @@
+@import "../../utils/vars";
+
+.main_page {
+    @include borderBox;
+    @include displayFlexRow;
+    justify-content: space-around;
+    &__block {
+        margin: 40px 40px;
+        flex-grow: 1;
+        width: 50%;
+
+        &_phone {
+            padding: 40px 0 40px 100px;
+            width: 100%;
+        }
+
+        &_info {
+            text-align: center;
+            padding: 30% 40% 30% 10%;
+            > h1 {
+                font-size: 34px;
+                margin-bottom: 20px;
+            }
+            > h3 {
+                font-weight: 100;
+                color: #666;
+                font-size: 20px;
+                margin-bottom: 25px;
+                > a {
+                    color: #000;
+                    font-weight: bold;
+                }
+                > span {
+                    font-weight: bold;
+                    color: #000;
+                }
+            }
+        }
+    }
+}
+
+.hr {
+    @include hr;
+}

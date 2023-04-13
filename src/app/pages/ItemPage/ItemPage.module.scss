@@ -1,0 +1,93 @@
+@import "../../utils/vars";
+
+.view {
+    @include view;
+}
+
+.item {
+    position: relative;
+    @include borderBox;
+    @include displayFlexRow;
+    min-height: 1000px;
+    &__img {
+        padding: 5% 5% 15% 15%;
+        > img {
+            min-width: 400px;
+            max-width: 400px;
+        }
+    }
+    &__info {
+        @include displayFlexColumn;
+        text-align: left;
+        padding: 6% 4% 10% 4%;
+        > h1 {
+            font-size: 28px;
+        }
+        > h4 {
+            margin-top: 4%;
+            font-weight: 100;
+            font-size: 14px;
+            color: gray;
+        }
+        > h3 {
+            margin-top: 5%;
+            font-size: 18px;
+        }
+        &__rating {
+            margin-top: 5%;
+            @include displayFlexRow;
+            > h3 {
+                margin-right: 5%;
+                > i {
+                    margin-left: 6px;
+                    color: gold;
+                }
+            }
+        }
+        > h2 {
+            margin-top: 5%;
+        }
+        > button {
+            margin-top: 5%;
+            font-size: 16px;
+            font-weight: bold;
+            width: 200px;
+            height: 50px;
+            border-radius: 16px;
+            border: 2px solid black;
+            background-color: black;
+            color: white;
+            transition-duration: 0.3s;
+            &:hover {
+                @include hoverBlackToWhite;
+            }
+        }
+        &__order {
+            margin-top: 5%;
+            font-size: 14px;
+            > h4 {
+                font-weight: 100;
+                margin-top: 2%;
+                > a {
+                    color: orange;
+                    text-decoration: none;
+                    font-weight: bold;
+                    &:visited {
+                        color: orange;
+                    }
+                }
+            }
+        }
+    }
+    &__navigate {
+        cursor: pointer;
+        position: absolute;
+        top: 4%;
+        left: 5%;
+        color: gray;
+        transition-duration: 0.3s;
+        &:hover {
+            color: black;
+        }
+    }
+}

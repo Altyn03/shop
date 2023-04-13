@@ -1,0 +1,27 @@
+@import "../../../utils/vars";
+
+.loginForm {
+    @include borderBox;
+    margin: 4% 4%;
+    > button {
+        font-size: 20px;
+        margin-top: 5%;
+        width: 30%;
+        height: 50px;
+        background-color: black;
+        color: white;
+        font-weight: bold;
+        border: 2px solid black;
+        border-radius: 20px;
+        transition-duration: 0.3s;
+        &:hover {
+            @include hoverBlackToWhite;
+        }
+        &:disabled {
+            opacity: 0.5;
+            &:hover {
+                @include hoverWhiteToBlack;
+            }
+        }
+    }
+}
