@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import styles from "./Catalog.module.scss";
 import FilterByCategory from "../../components/common/FilterByCategory/FilterByCategory";
 import SortItems from "../../components/common/SortItems/SortItems";
@@ -7,6 +6,7 @@ import CardsItem from "../../components/common/CardsItem/CardsItem";
 import Loader from "../../components/ui/Loader/Loader";
 import Pagination from "../../components/ui/Pagination/Pagination";
 import { paginate } from "../../utils/paginate";
+import httpService from "../../services/http.service";
 
 const Catalog = () => {
     const [items, setItems] = useState([]);
@@ -30,12 +30,9 @@ const Catalog = () => {
     //     console.log(items);
     // }, []);
 
-    const PRODUCTS_URL = "https://fakestoreapi.com/products/";
-    const CATEGORIES_URL = "https://fakestoreapi.com/products/categories";
-
     async function fetchAllItems() {
         try {
-            const { data } = await axios.get(PRODUCTS_URL);
+            const { data } = await httpService.get();
             setItems(data);
         } catch {
             setIsError(true);
@@ -46,7 +43,7 @@ const Catalog = () => {
 
     async function fetchAllCategories() {
         try {
-            const { data } = await axios.get(CATEGORIES_URL);
+            const { data } = await httpService.get("categories/");
             setCategoies([...data, ...["All"]]);
         } catch {
             setIsError(true);
