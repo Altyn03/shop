@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import TextField from "../Fields/TextField/TextField";
 import RadioField from "../Fields/RadioField/RadioField";
 import styles from "./RegisterForm.module.scss";
-import { validator } from "../../../utils/validator";
+import useForm from "../../../hooks/useForm";
 import CheckBoxField from "../Fields/CheckBoxField/CheckBoxField";
 
 const RegisterForm = () => {
@@ -13,14 +13,6 @@ const RegisterForm = () => {
         sex: "male",
         licence: false
     });
-    const [errors, setErrors] = useState({});
-
-    const handleChange = (target) => {
-        setData((prevState) => ({
-            ...prevState,
-            [target.name]: target.value
-        }));
-    };
 
     const validatorConfig = {
         name: {
@@ -59,24 +51,11 @@ const RegisterForm = () => {
         }
     };
 
-    useEffect(() => {
-        validate();
-    }, [data]);
-
-    const validate = () => {
-        const errors = validator(data, validatorConfig);
-        setErrors(errors);
-        return Object.keys(errors).length === 0;
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const isValid = validate();
-        if (!isValid) return;
-        console.log(data);
-    };
-
-    const isValid = Object.keys(errors).length === 0;
+    const { handleChange, handleSubmit, errors, isValid } = useForm(
+        data,
+        setData,
+        validatorConfig
+    );
 
     return (
         <form onSubmit={handleSubmit} className={styles.registerForm}>

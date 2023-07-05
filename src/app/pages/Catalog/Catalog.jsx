@@ -32,7 +32,7 @@ const Catalog = () => {
 
     async function fetchAllItems() {
         try {
-            const { data } = await httpService.get();
+            const { data } = await httpService.get("products/");
             setItems(data);
         } catch {
             setIsError(true);
@@ -43,7 +43,7 @@ const Catalog = () => {
 
     async function fetchAllCategories() {
         try {
-            const { data } = await httpService.get("categories/");
+            const { data } = await httpService.get("products/categories/");
             setCategoies([...data, ...["All"]]);
         } catch {
             setIsError(true);

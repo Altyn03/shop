@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import TextField from "../Fields/TextField/TextField";
 import CheckBoxField from "../Fields/CheckBoxField/CheckBoxField";
 import styles from "./LoginForm.module.scss";
-import { validator } from "../../../utils/validator";
+import useForm from "../../../hooks/useForm";
 
 const LoginForm = () => {
     const [data, setData] = useState({
@@ -10,14 +10,6 @@ const LoginForm = () => {
         password: "",
         stayOn: false
     });
-    const [errors, setErrors] = useState({});
-
-    const handleChange = (target) => {
-        setData((prevState) => ({
-            ...prevState,
-            [target.name]: target.value
-        }));
-    };
 
     const validatorConfig = {
         email: {
@@ -45,24 +37,11 @@ const LoginForm = () => {
         }
     };
 
-    useEffect(() => {
-        validate();
-    }, [data]);
-
-    const validate = () => {
-        const errors = validator(data, validatorConfig);
-        setErrors(errors);
-        return Object.keys(errors).length === 0;
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const isValid = validate();
-        if (!isValid) return;
-        console.log(data);
-    };
-
-    const isValid = Object.keys(errors).length === 0;
+    const { handleChange, handleSubmit, errors, isValid } = useForm(
+        data,
+        setData,
+        validatorConfig
+    );
 
     return (
         <form onSubmit={handleSubmit} className={styles.loginForm}>
