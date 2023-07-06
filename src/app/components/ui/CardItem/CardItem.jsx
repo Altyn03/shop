@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const CardItem = ({ image, price, title, rating, id }) => {
     return (
-        <Link to={`/catalog/${id}`} className={styles.item}>
+        <Link to={`${id}`} className={styles.item}>
             <img src={image} alt="sneakers" className={styles.img} />
             <h1>{title}</h1>
             <h2>{price} $</h2>

@@ -13,10 +13,11 @@ const productsService = {
         return data;
     },
 
-    getCategoris: async () => {
+    getCategories: async () => {
         const { data } = await httpService.get(
             productsEndpoint + "categories/"
         );
+        return data;
     },
 
     update: async (id, content) => {
