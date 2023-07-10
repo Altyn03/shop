@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import productsService from "../services/product.service";
 import Loader from "../components/ui/Loader/Loader";
+import { toast } from "react-toastify";
 
 const ProductsContext = React.createContext();
 
@@ -44,7 +45,7 @@ export const ProductsProvider = ({ children }) => {
     }, []);
 
     if (error) {
-        return <h1>{error}</h1>;
+        toast.error(error);
     }
 
     return (

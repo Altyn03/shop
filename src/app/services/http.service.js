@@ -1,5 +1,5 @@
 import axios from "axios";
-// import { toast } from "react-toastify";
+import { toast } from "react-toastify";
 import config from "./config.json";
 
 axios.defaults.baseURL = config.apiEndpoint;
@@ -14,7 +14,7 @@ axios.interceptors.response.use(
 
         if (!expectedErrors) {
             // logger.log(error);
-            // toast.error("Somthing was wrong. Try it later");
+            toast.error("Somthing was wrong. Try it later");
         }
         return Promise.reject(error);
     }
