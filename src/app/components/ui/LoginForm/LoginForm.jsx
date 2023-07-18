@@ -37,11 +37,18 @@ const LoginForm = () => {
         }
     };
 
-    const { handleChange, handleSubmit, errors, isValid } = useForm(
+    const { handleChange, validate, errors, isValid } = useForm(
         data,
         setData,
         validatorConfig
     );
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const isValid = validate();
+        if (!isValid) return;
+        console.log(data);
+    };
 
     return (
         <form onSubmit={handleSubmit} className={styles.loginForm}>

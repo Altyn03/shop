@@ -4,6 +4,8 @@ import RadioField from "../Fields/RadioField/RadioField";
 import styles from "./RegisterForm.module.scss";
 import useForm from "../../../hooks/useForm";
 import CheckBoxField from "../Fields/CheckBoxField/CheckBoxField";
+import { useAuth } from "../../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const RegisterForm = () => {
     const [data, setData] = useState({
@@ -13,6 +15,10 @@ const RegisterForm = () => {
         sex: "male",
         licence: false
     });
+
+    const navigate = useNavigate();
+
+    const { singUp } = useAuth();
 
     const validatorConfig = {
         name: {
@@ -51,11 +57,25 @@ const RegisterForm = () => {
         }
     };
 
-    const { handleChange, handleSubmit, errors, isValid } = useForm(
+    const { handleChange, validate, errors, isValid, setErrors } = useForm(
         data,
         setData,
         validatorConfig
     );
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const isValid = validate();
+        if (!isValid) return;
+        console.log(data);
+
+        try {
+            await singUp(data);
+            navigate("/catalog");
+        } catch (error) {
+            setErrors(error);
+        }
+    };
 
     return (
         <form onSubmit={handleSubmit} className={styles.registerForm}>

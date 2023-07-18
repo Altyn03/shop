@@ -2,9 +2,11 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import config from "./config.json";
 
-axios.defaults.baseURL = config.apiEndpoint;
+const http = axios.create({
+    baseURL: config.apiEndpoint
+});
 
-axios.interceptors.response.use(
+http.interceptors.response.use(
     (res) => res,
     function (error) {
         const expectedErrors =
@@ -20,9 +22,9 @@ axios.interceptors.response.use(
     }
 );
 const httpService = {
-    get: axios.get,
-    post: axios.post,
-    put: axios.put,
-    delete: axios.delete
+    get: http.get,
+    post: http.post,
+    put: http.put,
+    delete: http.delete
 };
 export default httpService;
