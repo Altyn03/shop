@@ -3,6 +3,8 @@ import TextField from "../Fields/TextField/TextField";
 import CheckBoxField from "../Fields/CheckBoxField/CheckBoxField";
 import styles from "./LoginForm.module.scss";
 import useForm from "../../../hooks/useForm";
+import { useAuth } from "../../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
     const [data, setData] = useState({
@@ -10,6 +12,8 @@ const LoginForm = () => {
         password: "",
         stayOn: false
     });
+    const { singIn } = useAuth();
+    const navigate = useNavigate();
 
     const validatorConfig = {
         email: {
@@ -37,17 +41,23 @@ const LoginForm = () => {
         }
     };
 
-    const { handleChange, validate, errors, isValid } = useForm(
+    const { handleChange, validate, errors, isValid, setErrors } = useForm(
         data,
         setData,
         validatorConfig
     );
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
         console.log(data);
+        try {
+            await singIn(data);
+            navigate("/catalog");
+        } catch (error) {
+            setErrors(error);
+        }
     };
 
     return (

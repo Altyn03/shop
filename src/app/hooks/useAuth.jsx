@@ -7,7 +7,12 @@ import localStorageService from "../services/localStorage.service";
 
 const AuthContext = React.createContext();
 
-const httpAuth = axios.create();
+const httpAuth = axios.create({
+    baseURL: "https://identitytoolkit.googleapis.com/v1/",
+    params: {
+        key: process.env.REACT_APP_FIREBASE_KEY
+    }
+});
 
 export const useAuth = () => {
     return useContext(AuthContext);
@@ -16,13 +21,11 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
     const [currentUser, setUser] = useState({});
     const [error, setError] = useState(null);
+    console.log(process.env);
 
     async function singUp({ email, password, ...rest }) {
-        const key = "AIzaSyD2uCewRYOgZpRxM56-eR36B-lJDP6s1LY";
-        const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${key}`;
-
         try {
-            const { data } = await httpAuth.post(url, {
+            const { data } = await httpAuth.post(`accounts:signUp`, {
                 email,
                 password,
                 returnSecureToken: true
@@ -44,6 +47,29 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    async function singIn({ email, password }) {
+        try {
+            const { data } = await httpAuth.post(
+                `accounts:signInWithPassword`,
+                {
+                    email,
+                    password,
+                    returnSecureToken: true
+                }
+            );
+            localStorageService.setTokens(data);
+        } catch (error) {
+            const { code, message } = error.response.data.error;
+            console.log(code, message);
+            if (code === 400) {
+                const errorObject = {
+                    email: "Пароль или email введены не правильно"
+                };
+                throw errorObject;
+            }
+        }
+    }
+
     async function createUser(data) {
         try {
             const content = await userService.create(data);
@@ -60,7 +86,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     return (
-        <AuthContext.Provider value={{ singUp, currentUser }}>
+        <AuthContext.Provider value={{ singUp, singIn, currentUser }}>
             {children}
         </AuthContext.Provider>
     );
