@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import config from "./config.json";
 
 const http = axios.create({
-    baseURL: config.apiEndpoint
+    baseURL: config.ProductsServerAPIEndpoint
 });
 
 http.interceptors.response.use(
@@ -21,10 +21,17 @@ http.interceptors.response.use(
         return Promise.reject(error);
     }
 );
-const httpService = {
-    get: http.get,
-    post: http.post,
-    put: http.put,
-    delete: http.delete
+
+const productsService = {
+    getAllProducts: async () => {
+        const { data } = await http.get();
+        return data;
+    },
+
+    getCategories: async () => {
+        const { data } = await http.get("categories/");
+        return data;
+    }
 };
-export default httpService;
+
+export default productsService;

@@ -1,41 +1,41 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./ItemPage.module.scss";
 import { useParams, useNavigate } from "react-router-dom";
 import Loader from "../../components/ui/Loader/Loader";
-import axios from "axios";
+import { productsServiceFirebase } from "../../services/Firebase.service";
+import { toast } from "react-toastify";
+import { useAuth } from "../../hooks/useAuth";
 
 const ItemPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-
-    const scrollRef = useRef();
+    const { isAuth } = useAuth();
 
     const [item, setItem] = useState({});
-
-    const [isError, setIsError] = useState(false);
+    const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-
-    if (isError) {
-        return <h1>Ошибка в данных</h1>;
-    } else if (!item) {
-        return <h1>Нет данных</h1>;
-    }
 
     useEffect(() => {
         fetchItem();
     }, []);
 
-    const ITEM_URL = `https://fakestoreapi.com/products/${id}`;
     async function fetchItem() {
         try {
-            const { data } = await axios.get(ITEM_URL);
+            const data = await productsServiceFirebase.getItem(id);
             setItem(data);
-        } catch {
-            setIsError(true);
+        } catch (error) {
+            setError(error.message);
         } finally {
             setIsLoading(false);
         }
     }
+
+    useEffect(() => {
+        if (error !== null) {
+            toast.error(error);
+            setError(null);
+        }
+    }, [error]);
 
     window.scroll(0, 0);
 
@@ -46,7 +46,7 @@ const ItemPage = () => {
                     <Loader />
                 </div>
             ) : (
-                <main className={styles.item} ref={scrollRef}>
+                <main className={styles.item}>
                     <div className={styles.item__img}>
                         <img src={item.image} alt="вещь" />
                     </div>
@@ -62,7 +62,17 @@ const ItemPage = () => {
                             <h3>Количество оценок: {item.rating.count}</h3>
                         </div>
                         <h2>{item.price} $</h2>
-                        <button>Добавить в корзину</button>
+                        <button
+                            onClick={() => {
+                                isAuth
+                                    ? toast.error(
+                                          "Выполните вход в профиль или зарегистрируйтесь!"
+                                      )
+                                    : toast("Пока все четко");
+                            }}
+                        >
+                            Добавить в корзину
+                        </button>
                         <div className={styles.item__info__order}>
                             <h4>
                                 <b>

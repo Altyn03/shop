@@ -1,13 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
-import userService from "../services/user.service";
+import { userService } from "../services/Firebase.service";
 import { toast } from "react-toastify";
 import localStorageService from "../services/localStorage.service";
 
 const AuthContext = React.createContext();
 
-const httpAuth = axios.create({
+export const httpAuth = axios.create({
     baseURL: "https://identitytoolkit.googleapis.com/v1/",
     params: {
         key: process.env.REACT_APP_FIREBASE_KEY
@@ -21,7 +21,6 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
     const [currentUser, setUser] = useState({});
     const [error, setError] = useState(null);
-    console.log(process.env);
 
     async function singUp({ email, password, ...rest }) {
         try {
@@ -32,7 +31,6 @@ export const AuthProvider = ({ children }) => {
             });
             localStorageService.setTokens(data);
             await createUser({ id: data.localId, email, ...rest });
-            console.log(data);
         } catch (error) {
             const { code, message } = error.response.data.error;
             console.log(code, message);
@@ -40,6 +38,11 @@ export const AuthProvider = ({ children }) => {
                 if (message === "EMAIL_EXISTS") {
                     const errorObject = {
                         email: "Пользователь с таким Email уже существует"
+                    };
+                    throw errorObject;
+                } else {
+                    const errorObject = {
+                        email: "Другая ошибка"
                     };
                     throw errorObject;
                 }
@@ -58,6 +61,7 @@ export const AuthProvider = ({ children }) => {
                 }
             );
             localStorageService.setTokens(data);
+            getUserData();
         } catch (error) {
             const { code, message } = error.response.data.error;
             console.log(code, message);
@@ -72,21 +76,39 @@ export const AuthProvider = ({ children }) => {
 
     async function createUser(data) {
         try {
-            const content = await userService.create(data);
-            setUser(content);
-            console.log(content);
-            console.log(currentUser);
+            const user = await userService.create(data);
+            setUser(user);
         } catch (error) {
             setError(error);
         }
     }
 
-    if (error) {
-        toast.error(error);
+    async function getUserData() {
+        try {
+            const content = await userService.getCurrentUser();
+            setUser(content);
+        } catch (error) {
+            setError(error);
+        }
     }
 
+    useEffect(() => {
+        if (localStorageService.getAccessToken()) {
+            getUserData();
+        }
+    }, []);
+
+    useEffect(() => {
+        if (error !== null) {
+            toast.error(error);
+            setError(null);
+        }
+    }, [error]);
+
+    const isAuth = Object.keys(currentUser).length === 0;
+
     return (
-        <AuthContext.Provider value={{ singUp, singIn, currentUser }}>
+        <AuthContext.Provider value={{ singUp, singIn, currentUser, isAuth }}>
             {children}
         </AuthContext.Provider>
     );

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import productsService from "../services/product.service";
+import productsService from "../services/http.service";
+import { productsServiceFirebase } from "../services/Firebase.service";
 import Loader from "../components/ui/Loader/Loader";
 import { toast } from "react-toastify";
 
@@ -39,14 +40,31 @@ export const ProductsProvider = ({ children }) => {
         }
     }
 
+    async function initializeFirebaseItems() {
+        try {
+            for (const item of items) {
+                await productsServiceFirebase.update(item.id, item);
+            }
+        } catch (error) {
+            setError(error.message);
+        }
+    }
+
     useEffect(() => {
         fetchAllCategories();
         fetchAllItems();
     }, []);
 
-    if (error) {
-        toast.error(error);
-    }
+    useEffect(() => {
+        initializeFirebaseItems();
+    }, []);
+
+    useEffect(() => {
+        if (error !== null) {
+            toast.error(error);
+            setError(null);
+        }
+    }, [error]);
 
     return (
         <ProductsContext.Provider value={{ items, categories }}>
