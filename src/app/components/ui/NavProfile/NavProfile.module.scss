@@ -1,0 +1,29 @@
+@import "../../../utils/vars";
+
+.dropdown {
+    text-align: center;
+}
+
+.toggle {
+    display: flex;
+    margin: 0 45%;
+    color: $gray;
+    align-items: center;
+    width: 100px;
+    @include transitDuration(0.2);
+    > img {
+        width: 40px;
+        margin-right: 20px;
+    }
+}
+
+.name {
+    & :hover {
+        color: white;
+    }
+}
+
+.drop_menu {
+    margin-left: 45%;
+    width: 25%;
+}

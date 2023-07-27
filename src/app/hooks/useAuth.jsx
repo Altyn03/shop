@@ -4,6 +4,7 @@ import axios from "axios";
 import { userService } from "../services/Firebase.service";
 import { toast } from "react-toastify";
 import localStorageService from "../services/localStorage.service";
+import Loader from "../components/ui/Loader/Loader";
 
 const AuthContext = React.createContext();
 
@@ -19,8 +20,9 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-    const [currentUser, setUser] = useState({});
+    const [currentUser, setUser] = useState();
     const [error, setError] = useState(null);
+    const [isLoading, setLoading] = useState(true);
 
     async function singUp({ email, password, ...rest }) {
         try {
@@ -71,6 +73,8 @@ export const AuthProvider = ({ children }) => {
                 };
                 throw errorObject;
             }
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -89,12 +93,16 @@ export const AuthProvider = ({ children }) => {
             setUser(content);
         } catch (error) {
             setError(error);
+        } finally {
+            setLoading(false);
         }
     }
 
     useEffect(() => {
         if (localStorageService.getAccessToken()) {
             getUserData();
+        } else {
+            setLoading(false);
         }
     }, []);
 
@@ -105,11 +113,9 @@ export const AuthProvider = ({ children }) => {
         }
     }, [error]);
 
-    const isAuth = Object.keys(currentUser).length === 0;
-
     return (
-        <AuthContext.Provider value={{ singUp, singIn, currentUser, isAuth }}>
-            {children}
+        <AuthContext.Provider value={{ singUp, singIn, currentUser }}>
+            {!isLoading ? children : <Loader />}
         </AuthContext.Provider>
     );
 };

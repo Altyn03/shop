@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import styles from "./LoginPage.module.scss";
 import LoginForm from "../../components/ui/LoginForm/LoginForm";
 import RegisterForm from "../../components/ui/RegisterForm/RegisterForm";
+import { useAuth } from "../../hooks/useAuth";
 
 const LoginPage = () => {
     const { type } = useParams();
+    const { currentUser } = useAuth();
     const [formType, setFormType] = useState(
         type === "register" ? type : "login"
     );
@@ -13,6 +15,10 @@ const LoginPage = () => {
     const toggleFormType = () => {
         setFormType((prev) => (prev === "register" ? "login" : "register"));
     };
+
+    if (currentUser) {
+        return <Navigate to="/" replace />;
+    }
 
     return (
         <div className={styles.loginPage}>

@@ -1,15 +1,17 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.css";
 import Main from "./pages/MainPage/Main";
 import Catalog from "./pages/Catalog/Catalog";
 import PayAndDelivery from "./pages/PayAndDelivery/PayAndDelivery";
 import Contacts from "./pages/Contacts/Contacts";
 import LoginPage from "./pages/LoginPage/LoginPage";
-import ShopingCart from "./pages/ShopingCart";
+import ShopCart from "./pages/ShopCart";
 import Layouts from "./components/common/Layouts/Layouts";
 import ItemPage from "./pages/ItemPage/ItemPage";
 import { ProductsProvider } from "./hooks/useProducts";
 import { AuthProvider } from "./hooks/useAuth";
+import ProtectedRoute from "./components/common/ProtectedRoute";
 
 function App() {
     return (
@@ -26,7 +28,10 @@ function App() {
                             path="/loginPage/:type?"
                             element={<LoginPage />}
                         />
-                        <Route path="/shopingCart" element={<ShopingCart />} />
+                        <Route
+                            path="/shopCart"
+                            element={<ProtectedRoute element={<ShopCart />} />}
+                        />
                         <Route path="*" element={<Main />} />
                     </Route>
                 </Routes>

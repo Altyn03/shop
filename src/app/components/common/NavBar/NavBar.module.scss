@@ -12,13 +12,14 @@
         color: $gray;
 
         &_image {
-            margin: 5px;
-            position: relative;
-            right: 55px;
+            margin: 15px auto 5px;
             width: 120px;
         }
 
         &_item {
+            flex-grow: 1;
+            width: 300px;
+            text-align: center;
             text-decoration: none;
             color: $gray;
             margin: auto 0;

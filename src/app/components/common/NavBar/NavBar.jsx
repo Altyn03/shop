@@ -2,11 +2,10 @@ import React from "react";
 import styles from "./NavBar.module.scss";
 import { NavLink, Link } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
+import NavProfile from "../../ui/NavProfile/NavProfile";
 
 const NavBar = () => {
-    const { isAuth, currentUser } = useAuth();
-    console.log(currentUser);
-    console.log(isAuth);
+    const { currentUser } = useAuth();
 
     const setActive = ({ isActive }) => {
         return isActive
@@ -17,11 +16,10 @@ const NavBar = () => {
     return (
         <div className={styles.header_and_nav}>
             <header className={styles.header}>
-                {!isAuth ? (
-                    <Link className={styles.header_item} to="/">
-                        <i className="fa-regular fa-user"></i>
-                        {currentUser.name}
-                    </Link>
+                {currentUser ? (
+                    <div className={styles.header_item} to="#">
+                        <NavProfile />
+                    </div>
                 ) : (
                     <Link className={styles.header_item} to="/loginPage">
                         <i className="fa-regular fa-user"></i>
@@ -35,8 +33,8 @@ const NavBar = () => {
                         alt="poizon"
                     />
                 </Link>
-                {/* {isAuth && ( */}
-                <Link className={styles.header_item} to="/shopingCart">
+                {/* {currentUser && ( */}
+                <Link className={styles.header_item} to="/shopCart">
                     <i className="fa-solid fa-cart-shopping"></i>
                     Корзина
                 </Link>

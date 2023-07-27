@@ -9,7 +9,7 @@ import { useAuth } from "../../hooks/useAuth";
 const ItemPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { isAuth } = useAuth();
+    const { currentUser } = useAuth();
 
     const [item, setItem] = useState({});
     const [error, setError] = useState(null);
@@ -64,7 +64,7 @@ const ItemPage = () => {
                         <h2>{item.price} $</h2>
                         <button
                             onClick={() => {
-                                isAuth
+                                !currentUser
                                     ? toast.error(
                                           "Выполните вход в профиль или зарегистрируйтесь!"
                                       )
