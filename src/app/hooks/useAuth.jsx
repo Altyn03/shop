@@ -5,6 +5,7 @@ import { userService } from "../services/Firebase.service";
 import { toast } from "react-toastify";
 import localStorageService from "../services/localStorage.service";
 import Loader from "../components/ui/Loader/Loader";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = React.createContext();
 
@@ -23,6 +24,7 @@ export const AuthProvider = ({ children }) => {
     const [currentUser, setUser] = useState();
     const [error, setError] = useState(null);
     const [isLoading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     async function singUp({ email, password, ...rest }) {
         try {
@@ -32,7 +34,14 @@ export const AuthProvider = ({ children }) => {
                 returnSecureToken: true
             });
             localStorageService.setTokens(data);
-            await createUser({ id: data.localId, email, ...rest });
+            await createUser({
+                id: data.localId,
+                email,
+                image: `https://i.pravatar.cc/150?img=${Math.round(
+                    Math.random() * 12
+                )}`,
+                ...rest
+            });
         } catch (error) {
             const { code, message } = error.response.data.error;
             console.log(code, message);
@@ -78,6 +87,12 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    function logOut() {
+        localStorageService.removeAuthData();
+        setUser(null);
+        navigate("/", { replace: true });
+    }
+
     async function createUser(data) {
         try {
             const user = await userService.create(data);
@@ -114,7 +129,7 @@ export const AuthProvider = ({ children }) => {
     }, [error]);
 
     return (
-        <AuthContext.Provider value={{ singUp, singIn, currentUser }}>
+        <AuthContext.Provider value={{ singUp, singIn, currentUser, logOut }}>
             {!isLoading ? children : <Loader />}
         </AuthContext.Provider>
     );

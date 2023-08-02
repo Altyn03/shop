@@ -12,6 +12,7 @@ import ItemPage from "./pages/ItemPage/ItemPage";
 import { ProductsProvider } from "./hooks/useProducts";
 import { AuthProvider } from "./hooks/useAuth";
 import ProtectedRoute from "./components/common/ProtectedRoute";
+import LogOut from "./components/common/LogOut";
 
 function App() {
     return (
@@ -28,6 +29,7 @@ function App() {
                             path="/loginPage/:type?"
                             element={<LoginPage />}
                         />
+                        <Route path="/logOut" element={<LogOut />} />
                         <Route
                             path="/shopCart"
                             element={<ProtectedRoute element={<ShopCart />} />}
