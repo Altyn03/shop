@@ -13,7 +13,7 @@ export const useProducts = () => {
 
 export const ProductsProvider = ({ children }) => {
     const [items, setItems] = useState([]);
-    const [categories, setCategoies] = useState([]);
+    const [categories, setCategories] = useState([]);
 
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -32,7 +32,7 @@ export const ProductsProvider = ({ children }) => {
     async function fetchAllCategories() {
         try {
             const data = await productsService.getCategories();
-            setCategoies([...data, ...["All"]]);
+            setCategories([...data, ...["All"]]);
         } catch (error) {
             setError(error.message);
         } finally {

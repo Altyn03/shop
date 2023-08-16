@@ -6,7 +6,7 @@ import Catalog from "./pages/Catalog/Catalog";
 import PayAndDelivery from "./pages/PayAndDelivery/PayAndDelivery";
 import Contacts from "./pages/Contacts/Contacts";
 import LoginPage from "./pages/LoginPage/LoginPage";
-import ShopCart from "./pages/ShopCart";
+import ShopCart from "./pages/ShopCart/ShopCart";
 import Layouts from "./components/common/Layouts/Layouts";
 import ItemPage from "./pages/ItemPage/ItemPage";
 import { ProductsProvider } from "./hooks/useProducts";

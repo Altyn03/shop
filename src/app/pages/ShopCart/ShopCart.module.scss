@@ -1,0 +1,44 @@
+@import "../../utils/vars";
+
+.cart {
+    background-color: #eff1f3;
+    height: 100%;
+    padding: 3% 10%;
+    > h1 {
+        font-weight: 600;
+        margin-left: 6%;
+    }
+    &_order {
+        @include displayFlexRow;
+        padding: 2% 5%;
+        justify-content: space-around;
+        &_items {
+            background-color: #fff;
+            padding: 0 40px 0 40px;
+            flex-grow: 2;
+            margin: 0 5% 0 2%;
+            > h3 {
+                margin: 0;
+                padding-top: 20px;
+                padding-bottom: 40px;
+                font-size: 22px;
+            }
+        }
+        &_sum {
+            background-color: #fff;
+            padding: 0 40px 0 40px;
+            flex-grow: 1;
+            > h3 {
+                margin: 0;
+                padding-top: 20px;
+                padding-bottom: 40px;
+                font-size: 22px;
+                border-bottom: 1px solid rgb(220, 225, 230);
+            }
+        }
+    }
+}
+
+.list_items {
+    @include displayFlexColumn;
+}
