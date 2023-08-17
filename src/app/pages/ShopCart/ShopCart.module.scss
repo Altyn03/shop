@@ -13,25 +13,25 @@
         padding: 2% 5%;
         justify-content: space-around;
         &_items {
+            border-radius: 30px;
             background-color: #fff;
             padding: 0 40px 0 40px;
             flex-grow: 2;
             margin: 0 5% 0 2%;
             > h3 {
                 margin: 0;
-                padding-top: 20px;
-                padding-bottom: 40px;
+                padding: 30px 10px 40px;
                 font-size: 22px;
             }
         }
         &_sum {
+            border-radius: 20px;
             background-color: #fff;
             padding: 0 40px 0 40px;
             flex-grow: 1;
             > h3 {
                 margin: 0;
-                padding-top: 20px;
-                padding-bottom: 40px;
+                padding: 30px 10px 40px;
                 font-size: 22px;
                 border-bottom: 1px solid rgb(220, 225, 230);
             }

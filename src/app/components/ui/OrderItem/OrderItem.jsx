@@ -6,8 +6,14 @@ const OrderItem = ({ image, title, price }) => {
     return (
         <div className={styles.item}>
             <img src={image} alt="item" />
-            <h5>{title}</h5>
-            <p>{price}</p>
+            <div>
+                <h5>{title}</h5>
+                <button className="btn btn-primary">Удалить</button>
+                <button className="btn btn-primary">+</button>
+                <button className="btn btn-primary">1</button>
+                <button className="btn btn-primary">-</button>
+            </div>
+            <p>{price} $</p>
         </div>
     );
 };
