@@ -5,11 +5,13 @@ import Loader from "../../components/ui/Loader/Loader";
 import { productsServiceFirebase } from "../../services/Firebase.service";
 import { toast } from "react-toastify";
 import { useAuth } from "../../hooks/useAuth";
+import { useOrder } from "../../hooks/useOrder";
 
 const ItemPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { currentUser } = useAuth();
+    const { addItemInCart } = useOrder();
 
     const [item, setItem] = useState({});
     const [error, setError] = useState(null);
@@ -63,12 +65,12 @@ const ItemPage = () => {
                         </div>
                         <h2>{item.price} $</h2>
                         <button
-                            onClick={() => {
+                            onClick={(event) => {
                                 !currentUser
                                     ? toast.error(
                                           "Выполните вход в профиль или зарегистрируйтесь!"
                                       )
-                                    : toast("Пока все четко");
+                                    : addItemInCart(id, event);
                             }}
                         >
                             Добавить в корзину

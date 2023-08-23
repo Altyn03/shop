@@ -2,8 +2,10 @@ import React from "react";
 import styles from "./CardItem.module.scss";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { useOrder } from "../../../hooks/useOrder";
 
 const CardItem = ({ image, price, title, rating, id }) => {
+    const { addItemInCart } = useOrder();
     return (
         <Link to={`${id}`} className={styles.item}>
             <img src={image} alt="sneakers" className={styles.img} />
@@ -14,7 +16,12 @@ const CardItem = ({ image, price, title, rating, id }) => {
                 <button className={styles.item__button_item}>
                     Больше фото
                 </button>
-                <button className={styles.item__button_item}>Купить</button>
+                <button
+                    className={styles.item__button_item}
+                    onClickCapture={(event) => addItemInCart(id, event)}
+                >
+                    Купить
+                </button>
             </div>
         </Link>
     );
