@@ -3,9 +3,11 @@ import styles from "./CardItem.module.scss";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { useOrder } from "../../../hooks/useOrder";
+import { useAuth } from "../../../hooks/useAuth";
 
 const CardItem = ({ image, price, title, rating, id }) => {
     const { addItemInCart } = useOrder();
+    const { currentUser } = useAuth();
     return (
         <Link to={`${id}`} className={styles.item}>
             <img src={image} alt="sneakers" className={styles.img} />
@@ -18,7 +20,9 @@ const CardItem = ({ image, price, title, rating, id }) => {
                 </button>
                 <button
                     className={styles.item__button_item}
-                    onClickCapture={(event) => addItemInCart(id, event)}
+                    onClickCapture={(event) =>
+                        currentUser && addItemInCart(id, event)
+                    }
                 >
                     Купить
                 </button>

@@ -13,6 +13,7 @@
         padding: 2% 5%;
         justify-content: space-around;
         &_items {
+            width: 460px;
             border-radius: 30px;
             background-color: #fff;
             padding: 0 40px 0 40px;
@@ -26,19 +27,57 @@
         }
         &_sum {
             border-radius: 20px;
+            max-width: 430px;
+            max-height: 470px;
             background-color: #fff;
             padding: 0 40px 0 40px;
             flex-grow: 1;
+            &:last-child {
+                font-weight: bold;
+            }
             > h3 {
                 margin: 0;
                 padding: 30px 10px 40px;
                 font-size: 22px;
                 border-bottom: 1px solid rgb(220, 225, 230);
             }
+            > p {
+                margin-top: 20px;
+                padding: 10px;
+                padding-left: 16px;
+            }
+            > button {
+                margin: 15% 15%;
+                width: 250px;
+                height: 60px;
+                border-radius: 30px;
+                background-color: black;
+                border: 2px solid black;
+                color: white;
+                transition-duration: 0.3s;
+                &:hover {
+                    box-shadow: 10px 10px 14px rgba(29, 59, 65, 0.1),
+                        5px 5px 7px rgba(0, 0, 0, 0.897);
+                }
+                &:active {
+                    @include hoverBlackToWhite;
+                }
+            }
         }
     }
 }
 
 .list_items {
+    width: 750px;
     @include displayFlexColumn;
+}
+
+.sum_div {
+    display: flex;
+    justify-content: space-between;
+    > span {
+        font-size: 18px;
+        padding: 10px;
+        margin-top: 20px;
+    }
 }

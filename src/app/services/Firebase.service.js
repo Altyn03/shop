@@ -97,3 +97,14 @@ export const productsServiceFirebase = {
         return data;
     }
 };
+
+export const orderService = {
+    getOrder: async (id) => {
+        const { data } = await httpFirebase.get("orders/" + id);
+        return data;
+    },
+    createOrder: async (id, content) => {
+        const { data } = await httpFirebase.put("orders/" + id, content);
+        return data;
+    }
+};

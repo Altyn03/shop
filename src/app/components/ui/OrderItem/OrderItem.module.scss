@@ -5,8 +5,12 @@
     font-size: 14px;
     border-top: 1px solid rgb(220, 225, 230);
     display: grid;
-    grid-template-columns: 100px 1fr 100px;
+    grid-template-columns: 100px 2fr 0.5fr;
     gap: 50px;
+    > img {
+        width: 100px;
+        height: 125px;
+    }
     > p {
         padding: 0 10px;
         font-weight: bold;
