@@ -20,10 +20,6 @@ export const OrderProvider = ({ children }) => {
     const { currentUser } = useAuth();
     const navigate = useNavigate();
 
-    if (!currentUser) {
-        setCart([]);
-    }
-
     const price =
         cart && cart.reduce((acc, item) => acc + item.quantity * item.price, 0);
 
@@ -66,7 +62,7 @@ export const OrderProvider = ({ children }) => {
             setError(error);
         } finally {
             setCart([]);
-            navigate("/", { replace: true });
+            navigate("/orderPage", { replace: true });
         }
     }
 

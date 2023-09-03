@@ -7,6 +7,7 @@ import PayAndDelivery from "./pages/PayAndDelivery/PayAndDelivery";
 import Contacts from "./pages/Contacts/Contacts";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import ShopCart from "./pages/ShopCart/ShopCart";
+import OrderPage from "./pages/OrderPage/OrderPage";
 import Layouts from "./components/common/Layouts/Layouts";
 import ItemPage from "./pages/ItemPage/ItemPage";
 import { ProductsProvider } from "./hooks/useProducts";
@@ -39,6 +40,12 @@ function App() {
                                 path="/shopCart"
                                 element={
                                     <ProtectedRoute element={<ShopCart />} />
+                                }
+                            />
+                            <Route
+                                path="/orderPage"
+                                element={
+                                    <ProtectedRoute element={<OrderPage />} />
                                 }
                             />
                             <Route path="*" element={<Main />} />

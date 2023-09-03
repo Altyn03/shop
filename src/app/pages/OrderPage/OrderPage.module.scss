@@ -1,0 +1,22 @@
+.main {
+    padding: 5% 10%;
+    margin: 0 20%;
+    text-align: center;
+    > img {
+        margin: 0 auto;
+        width: 150px;
+    }
+    > h1 {
+        margin-top: 10%;
+    }
+    > h3 {
+        margin-top: 5%;
+    }
+    > h5 {
+        margin-top: 5%;
+        > img {
+            margin: 30px auto;
+            width: 200px;
+        }
+    }
+}

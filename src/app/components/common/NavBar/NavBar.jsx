@@ -3,9 +3,11 @@ import styles from "./NavBar.module.scss";
 import { NavLink, Link } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
 import NavProfile from "../../ui/NavProfile/NavProfile";
+import { useOrder } from "../../../hooks/useOrder";
 
 const NavBar = () => {
     const { currentUser } = useAuth();
+    const { cart } = useOrder();
 
     const setActive = ({ isActive }) => {
         return isActive
@@ -33,12 +35,14 @@ const NavBar = () => {
                         alt="poizon"
                     />
                 </Link>
-                {/* {currentUser && ( */}
+
                 <Link className={styles.header_item} to="/shopCart">
                     <i className="fa-solid fa-cart-shopping"></i>
                     Корзина
+                    {cart.length !== 0 && (
+                        <span className={styles.cart}>{cart.length}</span>
+                    )}
                 </Link>
-                {/* )} */}
             </header>
             <nav className={styles.nav}>
                 <NavLink className={setActive} to="/">
