@@ -40,6 +40,7 @@ export const AuthProvider = ({ children }) => {
                 image: `https://i.pravatar.cc/150?img=${Math.round(
                     Math.random() * 12
                 )}`,
+                created_at: Date.now(),
                 ...rest
             });
         } catch (error) {
@@ -113,6 +114,17 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    async function updateUserData(id, content) {
+        try {
+            const data = await userService.updateCurrentUser(id, content);
+            setUser(data);
+        } catch (error) {
+            setError(error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     useEffect(() => {
         if (localStorageService.getAccessToken()) {
             getUserData();
@@ -129,7 +141,9 @@ export const AuthProvider = ({ children }) => {
     }, [error]);
 
     return (
-        <AuthContext.Provider value={{ singUp, singIn, currentUser, logOut }}>
+        <AuthContext.Provider
+            value={{ singUp, singIn, currentUser, logOut, updateUserData }}
+        >
             {!isLoading ? children : <Loader />}
         </AuthContext.Provider>
     );

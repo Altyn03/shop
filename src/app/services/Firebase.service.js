@@ -73,6 +73,10 @@ export const userService = {
             "users/" + localStorageService.getUserID()
         );
         return data;
+    },
+    updateCurrentUser: async (id, content) => {
+        const { data } = await httpFirebase.patch("users/" + id, content);
+        return data;
     }
 };
 

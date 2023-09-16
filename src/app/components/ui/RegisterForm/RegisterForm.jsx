@@ -12,6 +12,7 @@ const RegisterForm = () => {
         name: "",
         email: "",
         password: "",
+        telegram: "",
         sex: "male",
         licence: false
     });
@@ -47,6 +48,12 @@ const RegisterForm = () => {
             min: {
                 message: "Пароль должен состоять минимум из 8 символов",
                 value: 8
+            }
+        },
+        telegram: {
+            isRequired: {
+                message:
+                    "Telegram обязателен для заполнения, можете написать свой номер телефона"
             }
         },
         licence: {
@@ -100,6 +107,13 @@ const RegisterForm = () => {
                 value={data.password}
                 onChange={handleChange}
                 error={errors.password}
+            />
+            <TextField
+                label="Ваш Telegram"
+                name="telegram"
+                value={data.telegram}
+                onChange={handleChange}
+                error={errors.telegram}
             />
             <RadioField
                 options={[

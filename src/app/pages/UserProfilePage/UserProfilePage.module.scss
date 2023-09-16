@@ -1,0 +1,58 @@
+.main {
+    padding: 5% 10%;
+    margin: 0 10%;
+    border: 1px solid red;
+    display: flex;
+}
+
+.profile {
+    border: 1px solid blue;
+    max-width: 50%;
+    flex-grow: 1;
+    text-align: center;
+    &_info {
+        > img {
+            margin: 0 auto;
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+        }
+        > h2 {
+            margin-top: 20px;
+        }
+        > h4 {
+            margin-top: 20px;
+        }
+        > h6 {
+            margin-top: 18px;
+        }
+        > form {
+            > label {
+                margin-top: 18px;
+                max-width: 350px;
+                font-size: 14px;
+            }
+            > input {
+                margin-top: 18px;
+                width: 350px;
+                height: 40px;
+                padding: 5px;
+            }
+            > button {
+                margin-top: 18px;
+                width: 130px;
+                height: 36px;
+                background-color: black;
+                color: white;
+                border: none;
+                border-radius: 20px;
+                transition-duration: 0.3s;
+                &:hover {
+                    background-color: white;
+                    color: black;
+                    border: 1px solid black;
+                }
+            }
+        }
+    }
+}

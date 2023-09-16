@@ -8,6 +8,7 @@ import Contacts from "./pages/Contacts/Contacts";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import ShopCart from "./pages/ShopCart/ShopCart";
 import OrderPage from "./pages/OrderPage/OrderPage";
+import UserProfilePage from "./pages/UserProfilePage/UserProfilePage";
 import Layouts from "./components/common/Layouts/Layouts";
 import ItemPage from "./pages/ItemPage/ItemPage";
 import { ProductsProvider } from "./hooks/useProducts";
@@ -40,6 +41,14 @@ function App() {
                                 path="/shopCart"
                                 element={
                                     <ProtectedRoute element={<ShopCart />} />
+                                }
+                            />
+                            <Route
+                                path="/users/:id"
+                                element={
+                                    <ProtectedRoute
+                                        element={<UserProfilePage />}
+                                    />
                                 }
                             />
                             <Route

@@ -17,7 +17,7 @@ const NavProfile = () => {
             <div className={`btn dropdown-toggle ${styles.toggle}`}>
                 <img
                     src={currentUser.image}
-                    alt=""
+                    alt="avatar"
                     className="img-responsive rounded-circle"
                 />
                 <div className={styles.name}>{currentUser.name}</div>
