@@ -104,7 +104,12 @@ export const productsServiceFirebase = {
 
 export const orderService = {
     getOrder: async (id) => {
-        const { data } = await httpFirebase.get("orders/" + id);
+        const { data } = await httpFirebase.get("orders/", {
+            params: {
+                orderBy: '"userID"',
+                equalTo: `"${id}"`
+            }
+        });
         return data;
     },
     createOrder: async (id, content) => {

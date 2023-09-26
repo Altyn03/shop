@@ -28,6 +28,7 @@ export const OrderProvider = ({ children }) => {
             id: item.id,
             title: item.title,
             price: item.price,
+            image: item.image,
             quantity: item.quantity
         };
         return newItem;
@@ -86,6 +87,7 @@ export const OrderProvider = ({ children }) => {
                 addItemInCart,
                 deleteItemFromCart,
                 createOrder,
+
                 price
             }}
         >
