@@ -11,6 +11,8 @@ export const useProducts = () => {
     return useContext(ProductsContext);
 };
 
+// Полностью перешел на redux, это файл нигде не используется
+
 export const ProductsProvider = ({ children }) => {
     const [items, setItems] = useState([]);
     const [categories, setCategories] = useState([]);

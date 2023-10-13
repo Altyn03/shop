@@ -5,20 +5,28 @@ import SortItems from "../../components/common/SortItems/SortItems";
 import CardsItem from "../../components/common/CardsItem/CardsItem";
 import Pagination from "../../components/ui/Pagination/Pagination";
 import { paginate } from "../../utils/paginate";
-import { useProducts } from "../../hooks/useProducts";
+import { useSelector } from "react-redux";
+import { getCategories, getItems } from "../../store/products";
+// import { useProducts } from "../../hooks/useProducts";
 
 const Catalog = () => {
-    const { items, categories } = useProducts();
+    // const { items, categories } = useProducts();  2-ой этап: Получение из контекста который объявлен на все приложение
+    const items = useSelector(getItems());
+    const categories = useSelector(getCategories());
+    // 3-ий этап: получение из redux
 
-    const [currentCategories, setCurrentCategoies] = useState();
+    const [currentCategories, setCurrentCategories] = useState();
     const [currentPage, setCurrentPage] = useState(1);
 
     const [sortOrder, setSortOrder] = useState("");
 
+    if (!categories || !items) return "wait";
+
     const pageSize = 6;
+    const categoriesReverse = [...categories, ...["All"]].reverse();
 
     // useEffect(() => {
-    //     fetch("https://fakestoreapi.com/products/")
+    //     fetch("https://fakestoreapi.com/products/")   1-ый этап: Простой запрос к серверу с вещами и запись в состояние
     //         .then((res) => res.json())
     //         .then((json) => setItems(json));
     //     console.log(items);
@@ -30,9 +38,9 @@ const Catalog = () => {
 
     const handleSelectCategory = (category) => {
         if (category === "All") {
-            setCurrentCategoies();
+            setCurrentCategories();
         } else {
-            setCurrentCategoies(category);
+            setCurrentCategories(category);
         }
         setCurrentPage(1);
     };
@@ -44,8 +52,6 @@ const Catalog = () => {
             setSortOrder((prev) => (prev === item ? "down" : "up"));
         }
     };
-
-    const categoiesReverse = [...categories].reverse();
 
     const filteredItems = currentCategories
         ? items.filter((item) => {
@@ -69,7 +75,7 @@ const Catalog = () => {
         <div className={styles.catalog}>
             <FilterByCategory
                 currentCategories={currentCategories}
-                categories={categoiesReverse}
+                categories={categoriesReverse}
                 handleSelectCategory={handleSelectCategory}
             />
             <SortItems sortOrder={sortOrder} onSort={handleSortItems} />

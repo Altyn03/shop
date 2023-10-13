@@ -1,11 +1,13 @@
 import React, { useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { useProducts } from "./useProducts";
+// import { useProducts } from "./useProducts"; перешел с контекста на redux
 import { toast } from "react-toastify";
 import { orderService } from "../services/Firebase.service";
 import { useAuth } from "./useAuth";
 import { nanoid } from "nanoid";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { getItems } from "../store/products";
 
 const OrderContext = React.createContext();
 
@@ -16,7 +18,8 @@ export const useOrder = () => {
 export const OrderProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
     const [error, setError] = useState(null);
-    const { items } = useProducts();
+    // const { items } = useProducts(); перешел с контекста на redux
+    const items = useSelector(getItems());
     const { currentUser } = useAuth();
     const navigate = useNavigate();
 
