@@ -7,13 +7,15 @@ const productsSlice = createSlice({
         items: null,
         categories: null,
         isLoading: true,
-        error: null
+        error: null,
+        lastFetch: null
     },
     reducers: {
         productsRequested: (state) => {
             state.isLoading = true;
         },
         productsReceived: (state, action) => {
+            state.lastFetch = Date.now();
             state.items = action.payload;
             state.isLoading = false;
         },
@@ -36,15 +38,20 @@ const {
     categoriesReceived
 } = actions;
 
-export const loadProducts = () => async (dispatch) => {
-    dispatch(productsRequested());
-    try {
-        const items = await productsService.getAllProducts();
-        const categories = await productsService.getCategories();
-        dispatch(productsReceived(items));
-        dispatch(categoriesReceived(categories));
-    } catch (error) {
-        dispatch(productsRequestFiled(error.message));
+const isOutDated = (date) => Date.now() - date > 300000;
+
+export const loadProducts = () => async (dispatch, getState) => {
+    const { lastFetch } = getState().products;
+    if (isOutDated(lastFetch)) {
+        dispatch(productsRequested());
+        try {
+            const items = await productsService.getAllProducts();
+            const categories = await productsService.getCategories();
+            dispatch(productsReceived(items));
+            dispatch(categoriesReceived(categories));
+        } catch (error) {
+            dispatch(productsRequestFiled(error.message));
+        }
     }
 };
 

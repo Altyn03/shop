@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Catalog.module.scss";
 import FilterByCategory from "../../components/common/FilterByCategory/FilterByCategory";
 import SortItems from "../../components/common/SortItems/SortItems";
 import CardsItem from "../../components/common/CardsItem/CardsItem";
 import Pagination from "../../components/ui/Pagination/Pagination";
 import { paginate } from "../../utils/paginate";
-import { useSelector } from "react-redux";
-import { getCategories, getItems } from "../../store/products";
+import { useDispatch, useSelector } from "react-redux";
+import { getCategories, getItems, loadProducts } from "../../store/products";
 
 const Catalog = () => {
+    const dispatch = useDispatch();
     const items = useSelector(getItems());
     const categories = useSelector(getCategories());
 
@@ -16,6 +17,10 @@ const Catalog = () => {
     const [currentPage, setCurrentPage] = useState(1);
 
     const [sortOrder, setSortOrder] = useState("");
+
+    useEffect(() => {
+        dispatch(loadProducts());
+    }, []);
 
     if (!categories || !items) return "wait";
 
