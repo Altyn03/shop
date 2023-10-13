@@ -7,13 +7,10 @@ import Pagination from "../../components/ui/Pagination/Pagination";
 import { paginate } from "../../utils/paginate";
 import { useSelector } from "react-redux";
 import { getCategories, getItems } from "../../store/products";
-// import { useProducts } from "../../hooks/useProducts";
 
 const Catalog = () => {
-    // const { items, categories } = useProducts();  2-ой этап: Получение из контекста который объявлен на все приложение
     const items = useSelector(getItems());
     const categories = useSelector(getCategories());
-    // 3-ий этап: получение из redux
 
     const [currentCategories, setCurrentCategories] = useState();
     const [currentPage, setCurrentPage] = useState(1);
@@ -24,13 +21,6 @@ const Catalog = () => {
 
     const pageSize = 6;
     const categoriesReverse = [...categories, ...["All"]].reverse();
-
-    // useEffect(() => {
-    //     fetch("https://fakestoreapi.com/products/")   1-ый этап: Простой запрос к серверу с вещами и запись в состояние
-    //         .then((res) => res.json())
-    //         .then((json) => setItems(json));
-    //     console.log(items);
-    // }, []);
 
     const handlePageChange = (page) => {
         setCurrentPage(page);

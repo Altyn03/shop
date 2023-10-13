@@ -11,7 +11,6 @@ import OrderPage from "./pages/OrderPage/OrderPage";
 import UserProfilePage from "./pages/UserProfilePage/UserProfilePage";
 import Layouts from "./components/common/Layouts/Layouts";
 import ItemPage from "./pages/ItemPage/ItemPage";
-// import { ProductsProvider } from "./hooks/useProducts"; перешел на redux
 import { AuthProvider } from "./hooks/useAuth";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import LogOut from "./components/common/LogOut";
@@ -27,7 +26,6 @@ function App() {
 
     return (
         <AuthProvider>
-            {/* <ProductsProvider> */}
             <OrderProvider>
                 <Routes>
                     <Route path="/" element={<Layouts />}>
@@ -59,7 +57,6 @@ function App() {
                     </Route>
                 </Routes>
             </OrderProvider>
-            {/* </ProductsProvider> */}
         </AuthProvider>
     );
 }

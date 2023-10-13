@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
-// import { useProducts } from "./useProducts"; перешел с контекста на redux
 import { toast } from "react-toastify";
 import { orderService } from "../services/Firebase.service";
 import { useAuth } from "./useAuth";
@@ -18,7 +17,6 @@ export const useOrder = () => {
 export const OrderProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
     const [error, setError] = useState(null);
-    // const { items } = useProducts(); перешел с контекста на redux
     const items = useSelector(getItems());
     const { currentUser } = useAuth();
     const navigate = useNavigate();
@@ -76,11 +74,6 @@ export const OrderProvider = ({ children }) => {
             setError(null);
         }
     }, [error]);
-
-    // useEffect(() => {
-    //     console.log(cart);
-    //     console.log(productsCart);
-    // }, [cart]);
 
     return (
         <OrderContext.Provider
