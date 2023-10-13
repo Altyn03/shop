@@ -10,7 +10,7 @@ import { useProducts } from "../../hooks/useProducts";
 const Catalog = () => {
     const { items, categories } = useProducts();
 
-    const [currentCategories, setCurrentCategoies] = useState();
+    const [currentCategories, setCurrentCategories] = useState();
     const [currentPage, setCurrentPage] = useState(1);
 
     const [sortOrder, setSortOrder] = useState("");
@@ -30,9 +30,9 @@ const Catalog = () => {
 
     const handleSelectCategory = (category) => {
         if (category === "All") {
-            setCurrentCategoies();
+            setCurrentCategories();
         } else {
-            setCurrentCategoies(category);
+            setCurrentCategories(category);
         }
         setCurrentPage(1);
     };
@@ -45,7 +45,7 @@ const Catalog = () => {
         }
     };
 
-    const categoiesReverse = [...categories].reverse();
+    const categoriesReverse = [...categories].reverse();
 
     const filteredItems = currentCategories
         ? items.filter((item) => {
@@ -69,7 +69,7 @@ const Catalog = () => {
         <div className={styles.catalog}>
             <FilterByCategory
                 currentCategories={currentCategories}
-                categories={categoiesReverse}
+                categories={categoriesReverse}
                 handleSelectCategory={handleSelectCategory}
             />
             <SortItems sortOrder={sortOrder} onSort={handleSortItems} />
