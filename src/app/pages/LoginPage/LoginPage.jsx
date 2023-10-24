@@ -3,11 +3,12 @@ import { Navigate, useParams } from "react-router-dom";
 import styles from "./LoginPage.module.scss";
 import LoginForm from "../../components/ui/LoginForm/LoginForm";
 import RegisterForm from "../../components/ui/RegisterForm/RegisterForm";
-import { useAuth } from "../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getCurrentUser } from "../../store/user";
 
 const LoginPage = () => {
     const { type } = useParams();
-    const { currentUser } = useAuth();
+    const currentUser = useSelector(getCurrentUser());
     const [formType, setFormType] = useState(
         type === "register" ? type : "login"
     );

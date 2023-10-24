@@ -1,8 +1,8 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 import localStorageService from "./localStorage.service";
-import { httpAuth } from "../hooks/useAuth";
 import config from "./config.json";
+import { httpAuth } from "./auth.service";
 
 const httpFirebase = axios.create({
     baseURL: config.FirebaseServerAPIEndpoint

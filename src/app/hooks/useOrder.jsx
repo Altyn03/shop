@@ -2,11 +2,11 @@ import React, { useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import { orderService } from "../services/Firebase.service";
-import { useAuth } from "./useAuth";
 import { nanoid } from "nanoid";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getItems } from "../store/products";
+import { getCurrentUser } from "../store/user";
 
 const OrderContext = React.createContext();
 
@@ -18,7 +18,7 @@ export const OrderProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
     const [error, setError] = useState(null);
     const items = useSelector(getItems());
-    const { currentUser } = useAuth();
+    const currentUser = useSelector(getCurrentUser());
     const navigate = useNavigate();
 
     const price =

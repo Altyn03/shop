@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { useAuth } from "../../../hooks/useAuth";
 import { Link } from "react-router-dom";
 import styles from "./NavProfile.module.scss";
+import { getCurrentUser } from "../../../store/user";
+import { useSelector } from "react-redux";
 
 const NavProfile = () => {
     const [isShow, setIsShow] = useState(false);
@@ -10,7 +11,7 @@ const NavProfile = () => {
         setIsShow((prev) => !prev);
     };
 
-    const { currentUser } = useAuth();
+    const currentUser = useSelector(getCurrentUser());
 
     return (
         <div className={`dropdown ${styles.dropdown}`} onClick={toggleMenu}>

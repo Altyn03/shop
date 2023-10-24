@@ -4,8 +4,9 @@ import RadioField from "../Fields/RadioField/RadioField";
 import styles from "./RegisterForm.module.scss";
 import useForm from "../../../hooks/useForm";
 import CheckBoxField from "../Fields/CheckBoxField/CheckBoxField";
-import { useAuth } from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { signUp } from "../../../store/user";
 
 const RegisterForm = () => {
     const [data, setData] = useState({
@@ -17,9 +18,8 @@ const RegisterForm = () => {
         licence: false
     });
 
+    const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    const { singUp } = useAuth();
 
     const validatorConfig = {
         name: {
@@ -64,24 +64,18 @@ const RegisterForm = () => {
         }
     };
 
-    const { handleChange, validate, errors, isValid, setErrors } = useForm(
+    const { handleChange, validate, errors, isValid } = useForm(
         data,
         setData,
         validatorConfig
     );
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        console.log(data);
-
-        try {
-            await singUp(data);
-            navigate("/catalog");
-        } catch (error) {
-            setErrors(error);
-        }
+        dispatch(signUp(data));
+        navigate("/catalog");
     };
 
     return (

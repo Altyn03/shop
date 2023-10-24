@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import styles from "./UserProfilePage.module.scss";
-import { useAuth } from "../../hooks/useAuth";
 import { orderService } from "../../services/Firebase.service";
 import OrderHistoryItem from "../../components/ui/OrderHistoryItem/OrderHistoryItem";
+import { useDispatch, useSelector } from "react-redux";
+import { getCurrentUser, updateUserData } from "../../store/user";
 
 const UserProfilePage = () => {
     const [imageUrl, setImageUrl] = useState("");
     const [orders, setOrders] = useState([]);
-    const { currentUser, updateUserData } = useAuth();
+    const currentUser = useSelector(getCurrentUser());
+    const dispatch = useDispatch();
 
     const handleChange = (event) => {
         setImageUrl(event.target.value);
@@ -16,12 +18,12 @@ const UserProfilePage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await updateUserData(currentUser.id, {
-                ...currentUser,
-                image: imageUrl
-            });
-        } catch (error) {
-            console.error(error);
+            dispatch(
+                updateUserData(currentUser.id, {
+                    ...currentUser,
+                    image: imageUrl
+                })
+            );
         } finally {
             setImageUrl("");
         }
@@ -39,10 +41,6 @@ const UserProfilePage = () => {
     useEffect(() => {
         getOrder(currentUser.id);
     }, []);
-
-    useEffect(() => {
-        console.log(orders);
-    }, [orders]);
 
     return (
         <div className={styles.main}>

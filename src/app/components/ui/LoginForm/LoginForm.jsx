@@ -3,8 +3,9 @@ import TextField from "../Fields/TextField/TextField";
 import CheckBoxField from "../Fields/CheckBoxField/CheckBoxField";
 import styles from "./LoginForm.module.scss";
 import useForm from "../../../hooks/useForm";
-import { useAuth } from "../../../hooks/useAuth";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { logIn } from "../../../store/user";
 
 const LoginForm = () => {
     const [data, setData] = useState({
@@ -12,7 +13,8 @@ const LoginForm = () => {
         password: "",
         stayOn: false
     });
-    const { singIn } = useAuth();
+
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const validatorConfig = {
@@ -41,23 +43,18 @@ const LoginForm = () => {
         }
     };
 
-    const { handleChange, validate, errors, isValid, setErrors } = useForm(
+    const { handleChange, validate, errors, isValid } = useForm(
         data,
         setData,
         validatorConfig
     );
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        console.log(data);
-        try {
-            await singIn(data);
-            navigate("/catalog");
-        } catch (error) {
-            setErrors(error);
-        }
+        dispatch(logIn(data));
+        navigate("/catalog");
     };
 
     return (
