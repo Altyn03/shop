@@ -38,7 +38,7 @@ export const OrderProvider = ({ children }) => {
     function addItemInCart(id, event) {
         event.preventDefault();
         if (cart.some((item) => item.id === Number(id))) {
-            return toast("Вы уже добавили этот товар в корзину!!!");
+            return toast("В ы уже добавили этот товар в корзину!!!");
         }
         setCart((prev) => [
             ...prev,

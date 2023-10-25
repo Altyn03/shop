@@ -12,7 +12,9 @@ const userSlice = createSlice({
         error: null
     },
     reducers: {
-        authRequested: () => {},
+        authRequested: (state) => {
+            state.error = null;
+        },
         authRequestSuccess: () => {},
         authRequestFailed: (state, action) => {
             state.error = action.payload;
@@ -40,7 +42,7 @@ const userSlice = createSlice({
         userUpdateRequestFailed: (state, action) => {
             state.error = action.payload;
         },
-        userLogOut: (state, action) => {
+        userLogOut: (state) => {
             state.entities = null;
             state.isLoggedIn = false;
         }
@@ -107,6 +109,8 @@ export const logIn =
             }
         }
     };
+
+// export const logIn = createAsyncThunk('user/auth')
 
 function createUser(payload) {
     return async function (dispatch) {

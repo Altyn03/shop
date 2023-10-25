@@ -3,9 +3,9 @@ import TextField from "../Fields/TextField/TextField";
 import CheckBoxField from "../Fields/CheckBoxField/CheckBoxField";
 import styles from "./LoginForm.module.scss";
 import useForm from "../../../hooks/useForm";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getAuthErrors, logIn } from "../../../store/user";
 import { useNavigate } from "react-router-dom";
-import { logIn } from "../../../store/user";
 
 const LoginForm = () => {
     const [data, setData] = useState({
@@ -14,8 +14,9 @@ const LoginForm = () => {
         stayOn: false
     });
 
-    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const error = useSelector(getAuthErrors());
 
     const validatorConfig = {
         email: {
@@ -54,7 +55,9 @@ const LoginForm = () => {
         const isValid = validate();
         if (!isValid) return;
         dispatch(logIn(data));
-        navigate("/catalog");
+        if (!error) {
+            navigate("/catalog");
+        }
     };
 
     return (
@@ -81,6 +84,7 @@ const LoginForm = () => {
             >
                 Оставаться в системе
             </CheckBoxField>
+            {error && <p>{error}</p>}
             <button type="submit" disabled={!isValid}>
                 Войти
             </button>
