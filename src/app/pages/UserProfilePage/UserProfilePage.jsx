@@ -15,7 +15,7 @@ const UserProfilePage = () => {
         setImageUrl(event.target.value);
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         try {
             dispatch(

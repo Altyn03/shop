@@ -12,21 +12,6 @@ const userSlice = createSlice({
         error: null
     },
     reducers: {
-        authRequested: (state) => {
-            state.error = null;
-        },
-        authRequestSuccess: () => {},
-        authRequestFailed: (state, action) => {
-            state.error = action.payload;
-        },
-        userCreateRequest: () => {},
-        userCreated: (state, action) => {
-            state.entities = action.payload;
-            state.isLoggedIn = true;
-        },
-        userCreateFailed: (state, action) => {
-            state.error = action.payload;
-        },
         userLogOut: (state) => {
             state.entities = null;
             state.isLoggedIn = false;
@@ -67,44 +52,38 @@ const userSlice = createSlice({
             })
             .addCase(updateUserData.rejected, (state, action) => {
                 state.error = action.payload;
+            })
+            .addCase(register.pending, (state) => {
+                state.error = null;
+            })
+            .addCase(register.fulfilled, (state, action) => {
+                state.entities = action.payload;
+                state.isLoggedIn = true;
+            })
+            .addCase(register.rejected, (state, action) => {
+                state.error = action.payload;
             });
     }
 });
 
 const { reducer: userReducer, actions } = userSlice;
-const {
-    authRequested,
-    authRequestSuccess,
-    authRequestFailed,
-    userCreated,
-    userCreateRequest,
-    userCreateFailed,
-    userLogOut
-} = actions;
+const { userLogOut } = actions;
 
-export const signUp =
-    ({ email, password, ...rest }) =>
-    async (dispatch) => {
-        dispatch(authRequested());
+export const register = createAsyncThunk(
+    "user/register",
+    async ({ email, password, ...rest }) => {
         try {
-            const data = await authService.register({ email, password });
-            localStorageService.setTokens(data);
-            dispatch(
-                createUser({
-                    id: data.localId,
-                    email,
-                    image: `https://i.pravatar.cc/150?img=${Math.round(
-                        Math.random() * 12
-                    )}`,
-                    created_at: Date.now(),
-                    ...rest
-                })
-            );
-            dispatch(authRequestSuccess());
+            const data = await authService.register({
+                email,
+                password,
+                ...rest
+            });
+            return data;
         } catch (error) {
-            dispatch(authRequestFailed(error.message));
+            throw new Error(error.message);
         }
-    };
+    }
+);
 
 export const logIn = createAsyncThunk(
     "user/logIn",
@@ -123,18 +102,6 @@ export const logIn = createAsyncThunk(
         }
     }
 );
-
-function createUser(payload) {
-    return async function (dispatch) {
-        dispatch(userCreateRequest());
-        try {
-            const content = await userService.create(payload);
-            dispatch(userCreated(content));
-        } catch (error) {
-            dispatch(userCreateFailed(error.message));
-        }
-    };
-}
 
 export const getUserData = createAsyncThunk("user/getData", async () => {
     try {

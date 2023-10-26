@@ -11,13 +11,27 @@ export const httpAuth = axios.create({
 });
 
 const authService = {
-    register: async ({ email, password }) => {
+    register: async ({ email, password, ...rest }) => {
         const { data } = await httpAuth.post(`accounts:signUp`, {
             email,
             password,
             returnSecureToken: true
         });
-        return data;
+        localStorageService.setTokens(data);
+        try {
+            const user = await userService.create({
+                id: data.localId,
+                email,
+                image: `https://i.pravatar.cc/150?img=${Math.round(
+                    Math.random() * 12
+                )}`,
+                created_at: Date.now(),
+                ...rest
+            });
+            return user;
+        } catch (error) {
+            toast.error(error.message);
+        }
     },
     logIn: async ({ email, password }) => {
         const { data } = await httpAuth.post(`accounts:signInWithPassword`, {

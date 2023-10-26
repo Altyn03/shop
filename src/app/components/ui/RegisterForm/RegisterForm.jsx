@@ -6,7 +6,7 @@ import useForm from "../../../hooks/useForm";
 import CheckBoxField from "../Fields/CheckBoxField/CheckBoxField";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { signUp } from "../../../store/user";
+import { register } from "../../../store/user";
 
 const RegisterForm = () => {
     const [data, setData] = useState({
@@ -74,7 +74,7 @@ const RegisterForm = () => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        dispatch(signUp(data));
+        dispatch(register(data));
         navigate("/catalog");
     };
 
