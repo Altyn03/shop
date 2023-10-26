@@ -15,15 +15,11 @@ const UserProfilePage = () => {
         setImageUrl(event.target.value);
     };
 
+    console.log(currentUser);
     const handleSubmit = (e) => {
         e.preventDefault();
         try {
-            dispatch(
-                updateUserData(currentUser.id, {
-                    ...currentUser,
-                    image: imageUrl
-                })
-            );
+            dispatch(updateUserData({ currentUser, imageUrl }));
         } finally {
             setImageUrl("");
         }

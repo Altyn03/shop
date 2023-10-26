@@ -114,12 +114,15 @@ export const getUserData = createAsyncThunk("user/getData", async () => {
 
 export const updateUserData = createAsyncThunk(
     "user/updateData",
-    async (id, content) => {
+    async ({ currentUser, imageUrl }, { rejectWithValue }) => {
         try {
-            const data = await userService.updateCurrentUser(id, content);
+            const data = await userService.updateCurrentUser(currentUser.id, {
+                ...currentUser,
+                image: imageUrl
+            });
             return data;
         } catch (error) {
-            throw new Error(error.message);
+            return rejectWithValue(error.message);
         }
     }
 );
