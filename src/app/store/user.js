@@ -150,7 +150,6 @@ export const updateUserData = createAsyncThunk(
     async (id, content) => {
         try {
             const data = await userService.updateCurrentUser(id, content);
-            console.log(data);
             return data;
         } catch (error) {
             throw new Error(error.message);
