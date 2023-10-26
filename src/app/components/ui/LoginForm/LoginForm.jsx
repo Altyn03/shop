@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TextField from "../Fields/TextField/TextField";
 import CheckBoxField from "../Fields/CheckBoxField/CheckBoxField";
 import styles from "./LoginForm.module.scss";
 import useForm from "../../../hooks/useForm";
 import { useDispatch, useSelector } from "react-redux";
-import { getAuthErrors, logIn } from "../../../store/user";
+import { getAuthErrors, getIsLoggedIn, logIn } from "../../../store/user";
 import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
@@ -17,6 +17,7 @@ const LoginForm = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const error = useSelector(getAuthErrors());
+    const isLogged = useSelector(getIsLoggedIn());
 
     const validatorConfig = {
         email: {
@@ -55,13 +56,16 @@ const LoginForm = () => {
         const isValid = validate();
         if (!isValid) return;
         dispatch(logIn(data));
-        if (!error) {
-            navigate("/catalog");
-        }
     };
 
+    useEffect(() => {
+        if (isLogged) {
+            navigate("/catalog");
+        }
+    }, [navigate, isLogged]);
+
     return (
-        <form onSubmit={handleSubmit} className={styles.loginForm}>
+        <form onSubmit={(e) => handleSubmit(e)} className={styles.loginForm}>
             <TextField
                 label="Электронная почта"
                 name="email"
@@ -84,7 +88,7 @@ const LoginForm = () => {
             >
                 Оставаться в системе
             </CheckBoxField>
-            {error && <p>{error}</p>}
+            {error && <p style={{ color: "red" }}>{error}</p>}
             <button type="submit" disabled={!isValid}>
                 Войти
             </button>

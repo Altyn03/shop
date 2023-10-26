@@ -26,6 +26,7 @@ const TextField = ({ label, type, name, value, onChange, error }) => {
                 />
                 {type === "password" && (
                     <button
+                        type="button"
                         onMouseDown={toggleShowPassword}
                         onMouseUp={toggleShowPassword}
                     >

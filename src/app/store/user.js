@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import authService from "../services/auth.service";
 import localStorageService from "../services/localStorage.service";
 import { userService } from "../services/Firebase.service";
@@ -27,25 +27,47 @@ const userSlice = createSlice({
         userCreateFailed: (state, action) => {
             state.error = action.payload;
         },
-        userLogInRequested: () => {},
-        userLogInRequestSuccess: (state, action) => {
-            state.entities = action.payload;
-            state.isLoggedIn = true;
-        },
-        userLogInRequestFailed: (state, action) => {
-            state.error = action.payload;
-        },
-        userUpdateRequest: () => {},
-        userUpdateRequestSuccess: (state, action) => {
-            state.entities = action.payload;
-        },
-        userUpdateRequestFailed: (state, action) => {
-            state.error = action.payload;
-        },
         userLogOut: (state) => {
             state.entities = null;
             state.isLoggedIn = false;
         }
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(logIn.pending, (state) => {
+                state.isLoggedIn = false;
+                state.error = null;
+            })
+            .addCase(logIn.fulfilled, (state, action) => {
+                state.isLoggedIn = true;
+                state.entities = action.payload;
+            })
+            .addCase(logIn.rejected, (state, action) => {
+                state.isLoggedIn = false;
+                state.error = action.payload;
+            })
+            .addCase(getUserData.pending, (state) => {
+                state.isLoggedIn = false;
+                state.error = null;
+            })
+            .addCase(getUserData.fulfilled, (state, action) => {
+                state.isLoggedIn = true;
+                state.entities = action.payload;
+            })
+            .addCase(getUserData.rejected, (state, action) => {
+                state.isLoggedIn = false;
+                state.error = action.payload;
+                state.entities = null;
+            })
+            .addCase(updateUserData.pending, (state) => {
+                state.error = null;
+            })
+            .addCase(updateUserData.fulfilled, (state, action) => {
+                state.entities = action.payload;
+            })
+            .addCase(updateUserData.rejected, (state, action) => {
+                state.error = action.payload;
+            });
     }
 });
 
@@ -57,12 +79,6 @@ const {
     userCreated,
     userCreateRequest,
     userCreateFailed,
-    userLogInRequested,
-    userLogInRequestSuccess,
-    userLogInRequestFailed,
-    userUpdateRequest,
-    userUpdateRequestSuccess,
-    userUpdateRequestFailed,
     userLogOut
 } = actions;
 
@@ -90,27 +106,23 @@ export const signUp =
         }
     };
 
-export const logIn =
-    ({ email, password }) =>
-    async (dispatch) => {
-        dispatch(authRequested());
+export const logIn = createAsyncThunk(
+    "user/logIn",
+    async ({ email, password }, { rejectWithValue }) => {
         try {
             const data = await authService.logIn({ email, password });
-            localStorageService.setTokens(data);
-            dispatch(getUserData());
-            dispatch(authRequestSuccess());
+            return data;
         } catch (error) {
             const { code, message } = error.response.data.error;
             if (code === 400) {
                 const errorMessage = generateAuthError(message);
-                dispatch(authRequestFailed(errorMessage));
+                return rejectWithValue(errorMessage);
             } else {
-                dispatch(authRequestFailed(error.message));
+                return rejectWithValue(error.message);
             }
         }
-    };
-
-// export const logIn = createAsyncThunk('user/auth')
+    }
+);
 
 function createUser(payload) {
     return async function (dispatch) {
@@ -124,29 +136,27 @@ function createUser(payload) {
     };
 }
 
-export function getUserData() {
-    return async function (dispatch) {
-        dispatch(userLogInRequested());
-        try {
-            const content = await userService.getCurrentUser();
-            dispatch(userLogInRequestSuccess(content));
-        } catch (error) {
-            dispatch(userLogInRequestFailed(error.message));
-        }
-    };
-}
+export const getUserData = createAsyncThunk("user/getData", async () => {
+    try {
+        const content = await userService.getCurrentUser();
+        return content;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+});
 
-export function updateUserData(id, content) {
-    return async function (dispatch) {
-        dispatch(userUpdateRequest());
+export const updateUserData = createAsyncThunk(
+    "user/updateData",
+    async (id, content) => {
         try {
             const data = await userService.updateCurrentUser(id, content);
-            dispatch(userUpdateRequestSuccess(data));
+            console.log(data);
+            return data;
         } catch (error) {
-            dispatch(userUpdateRequestFailed(error.message));
+            throw new Error(error.message);
         }
-    };
-}
+    }
+);
 
 export const logOut = () => (dispatch) => {
     localStorageService.removeAuthData();

@@ -1,4 +1,7 @@
 import axios from "axios";
+import localStorageService from "./localStorage.service";
+import { userService } from "./Firebase.service";
+import { toast } from "react-toastify";
 
 export const httpAuth = axios.create({
     baseURL: "https://identitytoolkit.googleapis.com/v1/",
@@ -22,7 +25,13 @@ const authService = {
             password,
             returnSecureToken: true
         });
-        return data;
+        localStorageService.setTokens(data);
+        try {
+            const content = await userService.getCurrentUser();
+            return content;
+        } catch (error) {
+            toast.error(error.message);
+        }
     }
 };
 
