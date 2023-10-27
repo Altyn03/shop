@@ -11,7 +11,7 @@ const OrderPage = () => {
     useEffect(() => {
         const timeout = setTimeout(() => {
             navigate(`/users/${currentUser.id}`, { replace: true });
-        }, 9000);
+        }, 6000);
         return () => clearTimeout(timeout);
     }, []);
 

@@ -2,17 +2,17 @@ import React from "react";
 import styles from "./ItemPage.module.scss";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useOrder } from "../../hooks/useOrder";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getItems } from "../../store/products";
 import { getCurrentUser } from "../../store/user";
+import { addItemInCart } from "../../store/order";
 
 const ItemPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const items = useSelector(getItems());
     const currentUser = useSelector(getCurrentUser());
-    const { addItemInCart } = useOrder();
+    const dispatch = useDispatch();
 
     const currentItem = items.find((item) => item.id === Number(id));
 
@@ -41,7 +41,7 @@ const ItemPage = () => {
                             ? toast.error(
                                   "Выполните вход в профиль или зарегистрируйтесь!"
                               )
-                            : addItemInCart(id, event);
+                            : dispatch(addItemInCart(id, event));
                     }}
                 >
                     Добавить в корзину

@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
 import styles from "./UserProfilePage.module.scss";
-import { orderService } from "../../services/Firebase.service";
 import OrderHistoryItem from "../../components/ui/OrderHistoryItem/OrderHistoryItem";
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrentUser, updateUserData } from "../../store/user";
+import { getOrders, getOrdersUser } from "../../store/order";
 
 const UserProfilePage = () => {
     const [imageUrl, setImageUrl] = useState("");
-    const [orders, setOrders] = useState([]);
     const currentUser = useSelector(getCurrentUser());
     const dispatch = useDispatch();
+    const orders = useSelector(getOrdersUser());
 
     const handleChange = (event) => {
         setImageUrl(event.target.value);
     };
 
-    console.log(currentUser);
     const handleSubmit = (e) => {
         e.preventDefault();
         try {
@@ -25,18 +24,14 @@ const UserProfilePage = () => {
         }
     };
 
-    async function getOrder(userId) {
-        try {
-            const order = await orderService.getOrder(userId);
-            setOrders(Object.values(order));
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
     useEffect(() => {
-        getOrder(currentUser.id);
+        dispatch(getOrders());
     }, []);
+
+    const sortDateOrders = [...orders].sort(
+        (order1, order2) => order2.created_at - order1.created_at
+    );
+    console.log(sortDateOrders);
 
     return (
         <div className={styles.main}>
@@ -70,7 +65,7 @@ const UserProfilePage = () => {
             <div className={`${styles.profile} ${styles.profile_orderHistory}`}>
                 <h2>История заказов</h2>
                 <ul className={styles.profile_orderHistory_container}>
-                    {orders.map((order) => (
+                    {sortDateOrders.map((order) => (
                         <OrderHistoryItem key={order.orderID} order={order} />
                     ))}
                 </ul>

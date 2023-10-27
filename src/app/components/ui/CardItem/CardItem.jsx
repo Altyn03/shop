@@ -2,12 +2,12 @@ import React from "react";
 import styles from "./CardItem.module.scss";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { useOrder } from "../../../hooks/useOrder";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getCurrentUser } from "../../../store/user";
+import { addItemInCart } from "../../../store/order";
 
 const CardItem = ({ image, price, title, rating, id }) => {
-    const { addItemInCart } = useOrder();
+    const dispatch = useDispatch();
     const currentUser = useSelector(getCurrentUser());
     return (
         <Link to={`${id}`} className={styles.item}>
@@ -22,7 +22,7 @@ const CardItem = ({ image, price, title, rating, id }) => {
                 <button
                     className={styles.item__button_item}
                     onClickCapture={(event) =>
-                        currentUser && addItemInCart(id, event)
+                        currentUser && dispatch(addItemInCart(id, event))
                     }
                 >
                     Купить

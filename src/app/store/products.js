@@ -12,10 +12,10 @@ const productsSlice = createSlice({
     },
     reducers: {
         productsRequested: (state) => {
+            state.lastFetch = Date.now();
             state.isLoading = true;
         },
         productsReceived: (state, action) => {
-            state.lastFetch = Date.now();
             state.items = action.payload;
             state.isLoading = false;
         },

@@ -2,13 +2,13 @@ import React from "react";
 import styles from "./NavBar.module.scss";
 import { NavLink, Link } from "react-router-dom";
 import NavProfile from "../../ui/NavProfile/NavProfile";
-import { useOrder } from "../../../hooks/useOrder";
 import { useSelector } from "react-redux";
 import { getIsLoggedIn } from "../../../store/user";
+import { getOrderCart } from "../../../store/order";
 
 const NavBar = () => {
     const isLoggedIn = useSelector(getIsLoggedIn());
-    const { cart } = useOrder();
+    const cart = useSelector(getOrderCart());
 
     const setActive = ({ isActive }) => {
         return isActive

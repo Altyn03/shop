@@ -83,7 +83,6 @@ export const OrderProvider = ({ children }) => {
                 addItemInCart,
                 deleteItemFromCart,
                 createOrder,
-
                 price
             }}
         >
