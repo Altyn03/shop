@@ -4,13 +4,23 @@ import localStorageService from "../services/localStorage.service";
 import { userService } from "../services/Firebase.service";
 import { generateAuthError } from "../utils/generateAuthError";
 
+const initialState = localStorageService.getAccessToken()
+    ? {
+          entities: { id: localStorageService.getUserID() },
+          isLoggedIn: false,
+          isLoading: true,
+          error: null
+      }
+    : {
+          entities: null,
+          isLoggedIn: false,
+          isLoading: false,
+          error: null
+      };
+
 const userSlice = createSlice({
     name: "user",
-    initialState: {
-        entities: null,
-        isLoggedIn: false,
-        error: null
-    },
+    initialState,
     reducers: {
         userLogOut: (state) => {
             state.entities = null;
@@ -20,48 +30,58 @@ const userSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(logIn.pending, (state) => {
-                state.isLoggedIn = false;
+                state.isLoading = true;
                 state.error = null;
             })
             .addCase(logIn.fulfilled, (state, action) => {
                 state.isLoggedIn = true;
+                state.isLoading = false;
                 state.entities = action.payload;
             })
             .addCase(logIn.rejected, (state, action) => {
                 state.isLoggedIn = false;
+                state.isLoading = false;
                 state.error = action.payload;
             })
             .addCase(getUserData.pending, (state) => {
-                state.isLoggedIn = false;
                 state.error = null;
             })
             .addCase(getUserData.fulfilled, (state, action) => {
                 state.isLoggedIn = true;
+                state.isLoading = false;
                 state.entities = action.payload;
             })
             .addCase(getUserData.rejected, (state, action) => {
                 state.isLoggedIn = false;
+                state.isLoading = false;
                 state.error = action.payload;
                 state.entities = null;
             })
             .addCase(updateUserData.pending, (state) => {
                 state.error = null;
+                state.isLoading = true;
             })
             .addCase(updateUserData.fulfilled, (state, action) => {
                 state.entities = action.payload;
+                state.isLoading = false;
             })
             .addCase(updateUserData.rejected, (state, action) => {
                 state.error = action.payload;
+                state.isLoading = false;
             })
             .addCase(register.pending, (state) => {
                 state.error = null;
+                state.isLoading = true;
             })
             .addCase(register.fulfilled, (state, action) => {
                 state.entities = action.payload;
                 state.isLoggedIn = true;
+                state.isLoading = false;
             })
             .addCase(register.rejected, (state, action) => {
                 state.error = action.payload;
+                state.isLoggedIn = false;
+                state.isLoading = false;
             });
     }
 });

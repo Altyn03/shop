@@ -12,8 +12,8 @@ const productsSlice = createSlice({
     },
     reducers: {
         productsRequested: (state) => {
-            state.lastFetch = Date.now();
             state.isLoading = true;
+            state.lastFetch = Date.now();
         },
         productsReceived: (state, action) => {
             state.items = action.payload;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./UserProfilePage.module.scss";
 import OrderHistoryItem from "../../components/ui/OrderHistoryItem/OrderHistoryItem";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,13 +25,12 @@ const UserProfilePage = () => {
     };
 
     useEffect(() => {
-        dispatch(getOrders());
+        dispatch(getOrders(currentUser.id));
     }, []);
 
     const sortDateOrders = [...orders].sort(
         (order1, order2) => order2.created_at - order1.created_at
     );
-    console.log(sortDateOrders);
 
     return (
         <div className={styles.main}>

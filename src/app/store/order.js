@@ -65,8 +65,7 @@ export const { addItemToCart, deleteItemFromCart, setCartItemQuantity } =
 export const addItemInCart = (id, event) => {
     return function (dispatch, getState) {
         event.preventDefault();
-        const state = getState();
-        const { products, order } = state;
+        const { products, order } = getState();
         if (order.cart.some((item) => item.id === Number(id))) {
             return toast("Вы уже добавили этот товар в корзину!!!");
         }
@@ -78,11 +77,9 @@ export const addItemInCart = (id, event) => {
 
 export const getOrders = createAsyncThunk(
     "order/getOrders",
-    async (payload, { getState, rejectWithValue }) => {
-        const state = getState();
-        const { user } = state;
+    async (id, { rejectWithValue }) => {
         try {
-            const orders = await orderService.getOrder(user.entities.id);
+            const orders = await orderService.getOrder(id);
             return Object.values(orders);
         } catch (error) {
             return rejectWithValue(error.message);
@@ -94,10 +91,8 @@ export const createOrder = createAsyncThunk(
     "order/createOrder",
     async (payload, { getState, rejectWithValue }) => {
         const orderId = nanoid();
+        const { order, user } = getState();
 
-        const state = getState();
-        console.log(state);
-        const { order, user } = state;
         const productsCart = order.cart.map((item) => {
             const newItem = {
                 id: item.id,
@@ -108,12 +103,11 @@ export const createOrder = createAsyncThunk(
             };
             return newItem;
         });
-        const price =
-            order.cart &&
-            order.cart.reduce(
-                (acc, item) => acc + item.quantity * item.price,
-                0
-            );
+
+        const price = order.cart?.reduce(
+            (acc, item) => acc + item.quantity * item.price,
+            0
+        );
 
         try {
             await orderService.createOrder(orderId, {

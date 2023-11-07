@@ -7,6 +7,7 @@ import Pagination from "../../components/ui/Pagination/Pagination";
 import { paginate } from "../../utils/paginate";
 import { useDispatch, useSelector } from "react-redux";
 import { getCategories, getItems, loadProducts } from "../../store/products";
+import Loader from "../../components/ui/Loader/Loader";
 
 const Catalog = () => {
     const dispatch = useDispatch();
@@ -19,10 +20,14 @@ const Catalog = () => {
     const [sortOrder, setSortOrder] = useState("");
 
     useEffect(() => {
-        dispatch(loadProducts());
+        if (!items) {
+            dispatch(loadProducts());
+        }
     }, []);
 
-    if (!categories || !items) return "wait";
+    if (!categories || !items) {
+        return <Loader />;
+    }
 
     const pageSize = 6;
     const categoriesReverse = [...categories, ...["All"]].reverse();
