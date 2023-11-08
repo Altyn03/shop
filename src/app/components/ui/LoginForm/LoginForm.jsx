@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TextField from "../Fields/TextField/TextField";
 import CheckBoxField from "../Fields/CheckBoxField/CheckBoxField";
 import styles from "./LoginForm.module.scss";
 import useForm from "../../../hooks/useForm";
-import { useAuth } from "../../../hooks/useAuth";
+import { useDispatch, useSelector } from "react-redux";
+import { getAuthErrors, getIsLoggedIn, logIn } from "../../../store/user";
 import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
@@ -12,8 +13,11 @@ const LoginForm = () => {
         password: "",
         stayOn: false
     });
-    const { singIn } = useAuth();
+
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const error = useSelector(getAuthErrors());
+    const isLogged = useSelector(getIsLoggedIn());
 
     const validatorConfig = {
         email: {
@@ -41,27 +45,27 @@ const LoginForm = () => {
         }
     };
 
-    const { handleChange, validate, errors, isValid, setErrors } = useForm(
+    const { handleChange, validate, errors, isValid } = useForm(
         data,
         setData,
         validatorConfig
     );
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        console.log(data);
-        try {
-            await singIn(data);
-            navigate("/catalog");
-        } catch (error) {
-            setErrors(error);
-        }
+        dispatch(logIn(data));
     };
 
+    useEffect(() => {
+        if (isLogged) {
+            navigate("/catalog");
+        }
+    }, [navigate, isLogged]);
+
     return (
-        <form onSubmit={handleSubmit} className={styles.loginForm}>
+        <form onSubmit={(e) => handleSubmit(e)} className={styles.loginForm}>
             <TextField
                 label="Электронная почта"
                 name="email"
@@ -84,6 +88,7 @@ const LoginForm = () => {
             >
                 Оставаться в системе
             </CheckBoxField>
+            {error && <p style={{ color: "red" }}>{error}</p>}
             <button type="submit" disabled={!isValid}>
                 Войти
             </button>

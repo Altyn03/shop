@@ -1,11 +1,12 @@
 import React, { useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { useProducts } from "./useProducts";
 import { toast } from "react-toastify";
 import { orderService } from "../services/Firebase.service";
-import { useAuth } from "./useAuth";
 import { nanoid } from "nanoid";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { getItems } from "../store/products";
+import { getCurrentUser } from "../store/user";
 
 const OrderContext = React.createContext();
 
@@ -16,8 +17,8 @@ export const useOrder = () => {
 export const OrderProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
     const [error, setError] = useState(null);
-    const { items } = useProducts();
-    const { currentUser } = useAuth();
+    const items = useSelector(getItems());
+    const currentUser = useSelector(getCurrentUser());
     const navigate = useNavigate();
 
     const price =
@@ -37,7 +38,7 @@ export const OrderProvider = ({ children }) => {
     function addItemInCart(id, event) {
         event.preventDefault();
         if (cart.some((item) => item.id === Number(id))) {
-            return toast("Вы уже добавили этот товар в корзину!!!");
+            return toast("В ы уже добавили этот товар в корзину!!!");
         }
         setCart((prev) => [
             ...prev,
@@ -74,11 +75,6 @@ export const OrderProvider = ({ children }) => {
         }
     }, [error]);
 
-    // useEffect(() => {
-    //     console.log(cart);
-    //     console.log(productsCart);
-    // }, [cart]);
-
     return (
         <OrderContext.Provider
             value={{
@@ -87,7 +83,6 @@ export const OrderProvider = ({ children }) => {
                 addItemInCart,
                 deleteItemFromCart,
                 createOrder,
-
                 price
             }}
         >

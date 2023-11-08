@@ -1,48 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./UserProfilePage.module.scss";
-import { useAuth } from "../../hooks/useAuth";
-import { orderService } from "../../services/Firebase.service";
 import OrderHistoryItem from "../../components/ui/OrderHistoryItem/OrderHistoryItem";
+import { useDispatch, useSelector } from "react-redux";
+import { getCurrentUser, updateUserData } from "../../store/user";
+import { getOrders, getOrdersUser } from "../../store/order";
 
 const UserProfilePage = () => {
     const [imageUrl, setImageUrl] = useState("");
-    const [orders, setOrders] = useState([]);
-    const { currentUser, updateUserData } = useAuth();
+    const currentUser = useSelector(getCurrentUser());
+    const dispatch = useDispatch();
+    const orders = useSelector(getOrdersUser());
 
     const handleChange = (event) => {
         setImageUrl(event.target.value);
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         try {
-            await updateUserData(currentUser.id, {
-                ...currentUser,
-                image: imageUrl
-            });
-        } catch (error) {
-            console.error(error);
+            dispatch(updateUserData({ currentUser, imageUrl }));
         } finally {
             setImageUrl("");
         }
     };
 
-    async function getOrder(userId) {
-        try {
-            const order = await orderService.getOrder(userId);
-            setOrders(Object.values(order));
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
     useEffect(() => {
-        getOrder(currentUser.id);
+        dispatch(getOrders(currentUser.id));
     }, []);
 
-    useEffect(() => {
-        console.log(orders);
-    }, [orders]);
+    const sortDateOrders = [...orders].sort(
+        (order1, order2) => order2.created_at - order1.created_at
+    );
 
     return (
         <div className={styles.main}>
@@ -76,7 +64,7 @@ const UserProfilePage = () => {
             <div className={`${styles.profile} ${styles.profile_orderHistory}`}>
                 <h2>История заказов</h2>
                 <ul className={styles.profile_orderHistory_container}>
-                    {orders.map((order) => (
+                    {sortDateOrders.map((order) => (
                         <OrderHistoryItem key={order.orderID} order={order} />
                     ))}
                 </ul>

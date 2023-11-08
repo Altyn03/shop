@@ -1,12 +1,24 @@
 import React from "react";
 import styles from "./ShopCart.module.scss";
 import OrderItem from "../../components/ui/OrderItem/OrderItem";
-import { useOrder } from "../../hooks/useOrder";
+import { useDispatch, useSelector } from "react-redux";
+import { createOrder, getOrderCart } from "../../store/order";
+import { useNavigate } from "react-router-dom";
 
 const ShopCart = () => {
-    const { cart, price, createOrder } = useOrder();
+    const cart = useSelector(getOrderCart());
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const price =
+        cart && cart.reduce((acc, item) => acc + item.quantity * item.price, 0);
     const discount = 0;
     const totalPrice = price - discount;
+
+    const handleCreate = () => {
+        dispatch(createOrder());
+        navigate("/orderPage");
+    };
 
     return (
         <div className={styles.cart}>
@@ -39,7 +51,7 @@ const ShopCart = () => {
                             <span>{totalPrice.toFixed(2)} $</span>
                         </div>
                         {cart.length !== 0 && (
-                            <button onClick={() => createOrder()}>
+                            <button onClick={handleCreate}>
                                 Оформить заказ
                             </button>
                         )}

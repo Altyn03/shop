@@ -1,28 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Catalog.module.scss";
 import FilterByCategory from "../../components/common/FilterByCategory/FilterByCategory";
 import SortItems from "../../components/common/SortItems/SortItems";
 import CardsItem from "../../components/common/CardsItem/CardsItem";
 import Pagination from "../../components/ui/Pagination/Pagination";
 import { paginate } from "../../utils/paginate";
-import { useProducts } from "../../hooks/useProducts";
+import { useDispatch, useSelector } from "react-redux";
+import { getCategories, getItems, loadProducts } from "../../store/products";
+import Loader from "../../components/ui/Loader/Loader";
 
 const Catalog = () => {
-    const { items, categories } = useProducts();
+    const dispatch = useDispatch();
+    const items = useSelector(getItems());
+    const categories = useSelector(getCategories());
 
     const [currentCategories, setCurrentCategories] = useState();
     const [currentPage, setCurrentPage] = useState(1);
 
     const [sortOrder, setSortOrder] = useState("");
 
-    const pageSize = 6;
+    useEffect(() => {
+        if (!items) {
+            dispatch(loadProducts());
+        }
+    }, []);
 
-    // useEffect(() => {
-    //     fetch("https://fakestoreapi.com/products/")
-    //         .then((res) => res.json())
-    //         .then((json) => setItems(json));
-    //     console.log(items);
-    // }, []);
+    if (!categories || !items) {
+        return <Loader />;
+    }
+
+    const pageSize = 6;
+    const categoriesReverse = [...categories, ...["All"]].reverse();
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -44,8 +52,6 @@ const Catalog = () => {
             setSortOrder((prev) => (prev === item ? "down" : "up"));
         }
     };
-
-    const categoriesReverse = [...categories].reverse();
 
     const filteredItems = currentCategories
         ? items.filter((item) => {

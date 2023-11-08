@@ -1,13 +1,14 @@
 import React from "react";
 import styles from "./NavBar.module.scss";
 import { NavLink, Link } from "react-router-dom";
-import { useAuth } from "../../../hooks/useAuth";
 import NavProfile from "../../ui/NavProfile/NavProfile";
-import { useOrder } from "../../../hooks/useOrder";
+import { useSelector } from "react-redux";
+import { getIsLoggedIn } from "../../../store/user";
+import { getOrderCart } from "../../../store/order";
 
 const NavBar = () => {
-    const { currentUser } = useAuth();
-    const { cart } = useOrder();
+    const isLoggedIn = useSelector(getIsLoggedIn());
+    const cart = useSelector(getOrderCart());
 
     const setActive = ({ isActive }) => {
         return isActive
@@ -18,7 +19,7 @@ const NavBar = () => {
     return (
         <div className={styles.header_and_nav}>
             <header className={styles.header}>
-                {currentUser ? (
+                {isLoggedIn ? (
                     <div className={styles.header_item} to="#">
                         <NavProfile />
                     </div>

@@ -1,13 +1,16 @@
-import { useEffect } from "react";
-import { useAuth } from "../../hooks/useAuth";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { logOut } from "../../store/user";
+import { Navigate } from "react-router-dom";
 
 const LogOut = () => {
-    const { logOut } = useAuth();
+    const dispatch = useDispatch();
+
     useEffect(() => {
-        logOut();
+        dispatch(logOut());
     }, []);
 
-    return null;
+    return <Navigate to="/" replace />;
 };
 
 export default LogOut;

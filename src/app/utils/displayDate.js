@@ -1,7 +1,5 @@
 export function displayDate(data) {
-    console.log(data);
     const date = new Date(parseInt(data));
-    console.log(date);
     const dateNow = new Date();
     const yearDif = dateNow.getFullYear() - date.getFullYear();
     if (yearDif === 0) {

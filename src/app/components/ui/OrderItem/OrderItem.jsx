@@ -1,22 +1,15 @@
 import React, { useEffect, useState } from "react";
 import styles from "./OrderItem.module.scss";
 import PropTypes from "prop-types";
-import { useOrder } from "../../../hooks/useOrder";
+import { useDispatch } from "react-redux";
+import { deleteItemFromCart, setCartItemQuantity } from "../../../store/order";
 
 const OrderItem = ({ item }) => {
     const [amount, setAmount] = useState(1);
-    const { deleteItemFromCart } = useOrder();
-    const { setCart } = useOrder();
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        setCart((prev) => {
-            return prev.map((cartItem) => {
-                if (cartItem.id === item.id) {
-                    return (cartItem = { ...cartItem, quantity: amount });
-                }
-                return cartItem;
-            });
-        });
+        dispatch(setCartItemQuantity({ itemId: item.id, quantity: amount }));
     }, [amount]);
 
     const incrementAmount = () => {
@@ -35,7 +28,7 @@ const OrderItem = ({ item }) => {
                 <button
                     style={{ marginRight: 14 }}
                     className="btn btn-primary"
-                    onClick={() => deleteItemFromCart(item.id)}
+                    onClick={() => dispatch(deleteItemFromCart(item.id))}
                 >
                     Удалить
                 </button>

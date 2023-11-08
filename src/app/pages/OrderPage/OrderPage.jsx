@@ -1,16 +1,17 @@
 import React, { useEffect } from "react";
 import styles from "./OrderPage.module.scss";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getCurrentUser } from "../../store/user";
 
 const OrderPage = () => {
     const navigate = useNavigate();
-    const { currentUser } = useAuth();
+    const currentUser = useSelector(getCurrentUser());
 
     useEffect(() => {
         const timeout = setTimeout(() => {
             navigate(`/users/${currentUser.id}`, { replace: true });
-        }, 9000);
+        }, 6000);
         return () => clearTimeout(timeout);
     }, []);
 
