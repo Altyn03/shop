@@ -6,7 +6,7 @@ import { displayDate } from "../../../utils/displayDate";
 const OrderHistoryItem = ({ order }) => {
     return (
         <div className={styles.order}>
-            <h5>Заказ № {order.orderID}</h5>
+            <h5>Заказ № {order.id}</h5>
             <h6>Заказ был оформлен {displayDate(order.created_at)}.</h6>
             {order.products.map((item) => (
                 <div className={styles.order_item} key={item.title}>

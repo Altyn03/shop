@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import authService from "../services/auth.service";
 import localStorageService from "../services/localStorage.service";
-import { userService } from "../services/Firebase.service";
+import { userService } from "../services/MyServer.service";
 import { generateAuthError } from "../utils/generateAuthError";
 
 const initialState = localStorageService.getAccessToken()
@@ -91,16 +91,17 @@ const { userLogOut } = actions;
 
 export const register = createAsyncThunk(
     "user/register",
-    async ({ email, password, ...rest }) => {
+    async (payload, { rejectWithValue }) => {
         try {
-            const data = await authService.register({
-                email,
-                password,
-                ...rest
-            });
+            const data = await authService.register(payload);
+            if (!data.image) {
+                throw data;
+            }
             return data;
         } catch (error) {
-            throw new Error(error.message);
+            const { message } = error.response.data.error;
+            const errorMessage = generateAuthError(message);
+            return rejectWithValue(errorMessage);
         }
     }
 );
@@ -134,10 +135,9 @@ export const getUserData = createAsyncThunk("user/getData", async () => {
 
 export const updateUserData = createAsyncThunk(
     "user/updateData",
-    async ({ currentUser, imageUrl }, { rejectWithValue }) => {
+    async (imageUrl, { rejectWithValue }) => {
         try {
-            const data = await userService.updateCurrentUser(currentUser.id, {
-                ...currentUser,
+            const data = await userService.updateCurrentUser({
                 image: imageUrl
             });
             return data;

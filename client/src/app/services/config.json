@@ -1,4 +1,5 @@
 {
     "ProductsServerAPIEndpoint": "https://fakestoreapi.com/products/",
-    "FirebaseServerAPIEndpoint": "https://shop-9cf94-default-rtdb.europe-west1.firebasedatabase.app/"
+    "FirebaseServerAPIEndpoint": "https://shop-9cf94-default-rtdb.europe-west1.firebasedatabase.app/",
+    "MyServerAPIEndpoint": "http://localhost:8080/api/"
 }

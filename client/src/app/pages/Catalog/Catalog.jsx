@@ -6,13 +6,12 @@ import CardsItem from "../../components/common/CardsItem/CardsItem";
 import Pagination from "../../components/ui/Pagination/Pagination";
 import { paginate } from "../../utils/paginate";
 import { useDispatch, useSelector } from "react-redux";
-import { getCategories, getItems, loadProducts } from "../../store/products";
+import { getItems, loadProducts } from "../../store/products";
 import Loader from "../../components/ui/Loader/Loader";
 
 const Catalog = () => {
     const dispatch = useDispatch();
     const items = useSelector(getItems());
-    const categories = useSelector(getCategories());
 
     const [currentCategories, setCurrentCategories] = useState();
     const [currentPage, setCurrentPage] = useState(1);
@@ -25,12 +24,18 @@ const Catalog = () => {
         }
     }, []);
 
-    if (!categories || !items) {
+    if (!items) {
         return <Loader />;
     }
 
     const pageSize = 6;
-    const categoriesReverse = [...categories, ...["All"]].reverse();
+    const categories = [
+        "All",
+        "women's clothing",
+        "men's clothing",
+        "jewelery",
+        "electronics"
+    ];
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -75,7 +80,7 @@ const Catalog = () => {
         <div className={styles.catalog}>
             <FilterByCategory
                 currentCategories={currentCategories}
-                categories={categoriesReverse}
+                categories={categories}
                 handleSelectCategory={handleSelectCategory}
             />
             <SortItems sortOrder={sortOrder} onSort={handleSortItems} />

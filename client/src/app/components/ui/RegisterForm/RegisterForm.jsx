@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextField from "../Fields/TextField/TextField";
 import RadioField from "../Fields/RadioField/RadioField";
 import styles from "./RegisterForm.module.scss";
 import useForm from "../../../hooks/useForm";
 import CheckBoxField from "../Fields/CheckBoxField/CheckBoxField";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { register } from "../../../store/user";
+import { register, getAuthErrors, getIsLoggedIn } from "../../../store/user";
+import { useSelector, useDispatch } from "react-redux";
 
 const RegisterForm = () => {
     const [data, setData] = useState({
@@ -20,6 +20,8 @@ const RegisterForm = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const isLogged = useSelector(getIsLoggedIn());
+    const error = useSelector(getAuthErrors());
 
     const validatorConfig = {
         name: {
@@ -75,8 +77,13 @@ const RegisterForm = () => {
         const isValid = validate();
         if (!isValid) return;
         dispatch(register(data));
-        navigate("/catalog");
     };
+
+    useEffect(() => {
+        if (isLogged) {
+            navigate("/catalog");
+        }
+    }, [navigate, isLogged]);
 
     return (
         <form onSubmit={handleSubmit} className={styles.registerForm}>
@@ -128,6 +135,7 @@ const RegisterForm = () => {
             >
                 Подтвердить <a href="#">лицензионное соглашение</a>
             </CheckBoxField>
+            {error && <p style={{ color: "red" }}>{error}</p>}
             <button type="submit" disabled={!isValid}>
                 Зарегистрироваться
             </button>

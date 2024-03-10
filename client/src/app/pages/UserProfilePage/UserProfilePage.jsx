@@ -15,10 +15,9 @@ const UserProfilePage = () => {
         setImageUrl(event.target.value);
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = () => {
         try {
-            dispatch(updateUserData({ currentUser, imageUrl }));
+            dispatch(updateUserData(imageUrl));
         } finally {
             setImageUrl("");
         }
@@ -38,10 +37,7 @@ const UserProfilePage = () => {
                 <img src={currentUser.image} alt="profile" />
                 <h2>{currentUser.name}</h2>
                 <h4>@{currentUser.telegram}</h4>
-                <h6>
-                    Дата регистрации:{" "}
-                    {new Date(currentUser.created_at).toLocaleDateString()}
-                </h6>
+                <h6>Дата регистрации: {currentUser.createdAt}</h6>
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="image">
                         Если вы хотите изменить аватар вашего профиля вставьте
@@ -65,7 +61,7 @@ const UserProfilePage = () => {
                 <h2>История заказов</h2>
                 <ul className={styles.profile_orderHistory_container}>
                     {sortDateOrders.map((order) => (
-                        <OrderHistoryItem key={order.orderID} order={order} />
+                        <OrderHistoryItem key={order.id} order={order} />
                     ))}
                 </ul>
             </div>

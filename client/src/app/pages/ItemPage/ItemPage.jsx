@@ -29,10 +29,10 @@ const ItemPage = () => {
                 <h3>{currentItem.description}</h3>
                 <div className={styles.item__info__rating}>
                     <h3>
-                        {/* Оценка: {currentItem.rating.rate} */}
+                        Оценка: {currentItem.rating.rate}
                         <i className="fa-solid fa-star"></i>
                     </h3>
-                    {/* <h3>Количество оценок: {currentItem.rating.count}</h3> */}
+                    <h3>Количество оценок: {currentItem.rating.count}</h3>
                 </div>
                 <h2>{currentItem.price} $</h2>
                 <button

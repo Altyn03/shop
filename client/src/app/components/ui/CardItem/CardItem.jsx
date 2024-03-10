@@ -36,7 +36,7 @@ CardItem.propTypes = {
     rating: PropTypes.object,
     image: PropTypes.string,
     title: PropTypes.string,
-    price: PropTypes.number,
+    price: PropTypes.string,
     id: PropTypes.number
 };
 

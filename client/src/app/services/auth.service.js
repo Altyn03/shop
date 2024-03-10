@@ -1,51 +1,47 @@
 import axios from "axios";
 import localStorageService from "./localStorage.service";
-import { userService } from "./Firebase.service";
-import { toast } from "react-toastify";
+import { userService } from "./MyServer.service";
+import config from "../services/config.json";
 
 export const httpAuth = axios.create({
-    baseURL: "https://identitytoolkit.googleapis.com/v1/",
-    params: {
-        key: process.env.REACT_APP_FIREBASE_KEY
-    }
+    baseURL: config.MyServerAPIEndpoint + "user/"
 });
 
 const authService = {
     register: async ({ email, password, ...rest }) => {
-        const { data } = await httpAuth.post(`accounts:signUp`, {
-            email,
-            password,
-            returnSecureToken: true
-        });
-        localStorageService.setTokens(data);
         try {
-            const user = await userService.create({
-                id: data.localId,
+            const { data } = await httpAuth.post(`signUp/`, {
                 email,
+                password,
                 image: `https://i.pravatar.cc/150?img=${Math.round(
                     Math.random() * 12
                 )}`,
-                created_at: Date.now(),
                 ...rest
             });
-            return user;
+            localStorageService.setTokens(data);
+            return data.user ? data.user : new Error(data);
         } catch (error) {
-            toast.error(error.message);
+            return error;
         }
     },
     logIn: async ({ email, password }) => {
-        const { data } = await httpAuth.post(`accounts:signInWithPassword`, {
+        const { data } = await httpAuth.post(`signInWithPassword/`, {
             email,
-            password,
-            returnSecureToken: true
+            password
         });
         localStorageService.setTokens(data);
         try {
             const content = await userService.getCurrentUser();
             return content;
         } catch (error) {
-            toast.error(error.message);
+            return error;
         }
+    },
+    refreshToken: async () => {
+        const { data } = await httpAuth.post("refreshToken/", {
+            refresh_token: localStorageService.getRefreshToken()
+        });
+        return data;
     }
 };
 

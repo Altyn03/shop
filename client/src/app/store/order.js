@@ -1,5 +1,5 @@
-import { createAsyncThunk, createSlice, nanoid } from "@reduxjs/toolkit";
-import { orderService } from "../services/Firebase.service";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { orderService } from "../services/MyServer.service";
 import { toast } from "react-toastify";
 
 const orderSlice = createSlice({
@@ -90,7 +90,6 @@ export const getOrders = createAsyncThunk(
 export const createOrder = createAsyncThunk(
     "order/createOrder",
     async (payload, { getState, rejectWithValue }) => {
-        const orderId = nanoid();
         const { order, user } = getState();
 
         const productsCart = order.cart.map((item) => {
@@ -110,11 +109,10 @@ export const createOrder = createAsyncThunk(
         );
 
         try {
-            await orderService.createOrder(orderId, {
-                orderID: orderId,
-                userID: user.entities.id,
+            await orderService.createOrder({
+                userId: user.entities.id,
                 created_at: Date.now(),
-                priceOrder: price,
+                priceOrder: Math.ceil(price),
                 products: productsCart
             });
         } catch (error) {
